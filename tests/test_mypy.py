@@ -64,7 +64,9 @@ def test_mypy_accepts_exported_hints(tmp_path: Path) -> None:
     assert result.returncode == 0, result.stdout + result.stderr
 
 
-def test_mypy_rejects_invalid_values_for_exported_hints(tmp_path: Path) -> None:
+def test_mypy_rejects_invalid_values_for_exported_hints(
+    tmp_path: Path,
+) -> None:
     """Mypy should reject incompatible values for the exported hints."""
     path = tmp_path / "invalid_hints.py"
     path.write_text(
