@@ -1,16 +1,15 @@
 [project]
-name = "bagof-name"
-# Replace these template contacts before publishing.
+name = "bagof-hints"
 authors = [
-    {name = "Your Name", email = "your.email@example.com"},
+    {name = "Yael Balbastre", email = "yael.balbastre@gmail.com"},
 ]
 maintainers = [
-    {name = "Your Name", email = "your.email@example.com"},
+    {name = "Yael Balbastre", email = "yael.balbastre@gmail.com"},
 ]
-description = "Template package for bagof.name"
+description = "Reusable typing hints for Python projects"
 readme = "README.md"
 license = "MIT"
-keywords = ["bagof", "template", "python"]
+keywords = ["bagof", "typing", "hints"]
 classifiers = [
     "Development Status :: 1 - Planning",
     "Intended Audience :: Developers",
@@ -30,13 +29,14 @@ dependencies = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/bagofseeds/bagof-name"
-Documentation = "https://github.com/bagofseeds/bagof-name#readme"
-Issues = "https://github.com/bagofseeds/bagof-name/issues"
-Repository = "https://github.com/bagofseeds/bagof-name"
+Homepage = "https://github.com/balbasty/bagof-hints"
+Documentation = "https://github.com/balbasty/bagof-hints#readme"
+Issues = "https://github.com/balbasty/bagof-hints/issues"
+Repository = "https://github.com/balbasty/bagof-hints"
 
 [project.optional-dependencies]
 test = [
+    "mypy==1.14.1",
     "pytest>=7",
 ]
 
@@ -50,6 +50,9 @@ build-backend = "setuptools.build_meta"
 
 [tool.setuptools]
 package-dir = {"" = "src"}
+
+[tool.setuptools.package-data]
+"bagof.hints" = ["py.typed"]
 
 [tool.setuptools.packages.find]
 where = ["src"]
@@ -68,7 +71,7 @@ dirty = "{base_version}+{distance}.{vcs}{rev}.dirty"
 distance-dirty = "{base_version}+{distance}.{vcs}{rev}.dirty"
 
 [tool.versioningit.write]
-file = "src/bagof/name/_version.py"
+file = "src/bagof/hints/_version.py"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
