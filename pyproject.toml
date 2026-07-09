@@ -8,7 +8,7 @@ maintainers = [
 ]
 description = "Reusable typing hints for Python projects"
 readme = "README.md"
-license = "MIT"
+license = {text = "MIT"}
 keywords = ["bagof", "typing", "hints"]
 classifiers = [
     "Development Status :: 1 - Planning",
