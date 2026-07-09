@@ -30,7 +30,7 @@ dependencies = [
 
 [project.urls]
 Homepage = "https://github.com/bagofseeds/bagof-hints"
-Documentation = "https://github.com/balbasty/bagof-hints#readme"
+Documentation = "https://github.com/bagofseeds/bagof-hints#readme"
 Issues = "https://github.com/balbasty/bagof-hints/issues"
 Repository = "https://github.com/balbasty/bagof-hints"
 
