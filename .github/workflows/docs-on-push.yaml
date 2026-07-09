@@ -1,0 +1,17 @@
+name: Build and deploy docs on push
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  deploy:
+    uses: bagofseeds/actions/.github/workflows/docs.yaml@main
+    with:
+      tag: ${{ github.ref }}
