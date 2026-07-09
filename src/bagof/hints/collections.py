@@ -84,12 +84,12 @@ class Sequence(Reversible[T_co], Collection[T_co]):
 
     def count(self, value: T_co) -> int: ...
 
+    def __getitem__(self, index: int) -> T_co: ...
+
 
 @tx.runtime_checkable
 class MutableSequence(Sequence[T_co]):
     """See [collections.abc.MutableSequence][]."""
-
-    def __getitem__(self, index: int) -> T_co: ...
 
     def __setitem__(self, index: int, value: T_co) -> None: ...
 
