@@ -1,11 +1,28 @@
 """Protocols that are compatible with collections.abc"""
+__all__ = [
+    "Container",
+    "Hashable",
+    "Iterable",
+    "Iterator",
+    "Reversible",
+    "Generator",
+    "Sized",
+    "Collection",
+    "Sequence",
+    "MutableSequence",
+    "Set",
+    "MutableSet",
+    "Mapping",
+    "MutableMapping",
+    "Awaitable",
+    "Buffer",
+]
+
 from types import TracebackType
 
 import typing_extensions as tx
 
-T_co = tx.TypeVar("T", covariant=True)
-V_co = tx.TypeVar("V", covariant=True)
-T_contra = tx.TypeVar("T", contravariant=True)
+from .typevars import T_co, K_co
 
 
 @tx.runtime_checkable
@@ -16,7 +33,7 @@ class Container(tx.Protocol[T_co]):
 
 
 @tx.runtime_checkable
-class Hashable(tx.Protocol[T_co]):
+class Hashable(tx.Protocol):
     """See [collections.abc.Hashable][]."""
 
     def __hash__(self) -> int: ...
@@ -30,54 +47,63 @@ class Iterable(tx.Protocol[T_co]):
 
 
 @tx.runtime_checkable
-class Iterator(Iterable[T_co]):
+class Iterator(Iterable[T_co], tx.Protocol[T_co]):
     """See [collections.abc.Iterator][]."""
 
     def __next__(self) -> T_co: ...
 
 
 @tx.runtime_checkable
-class Reversible(Iterable[T_co]):
+class Reversible(Iterable[T_co], tx.Protocol[T_co]):
     """See [collections.abc.Reversible][]."""
 
     def __reversed__(self) -> None: ...
 
 
-YieldType = T_co
-SendType = T_contra
-ReturnType = V_co
+YieldType = tx.TypeVar("YieldType", covariant=True, default=tx.Any)
+SendType = tx.TypeVar("SendType", contravariant=True, default=None)
+ReturnType = tx.TypeVar("ReturnType", covariant=True, default=None)
+
 
 @tx.runtime_checkable
 class Generator(
   Iterator[YieldType], 
-  tx.Generic[YieldType, SendType, ReturnType]
+  tx.Protocol[YieldType, SendType, ReturnType]
 ):
     """See [collections.abc.Generator][]."""
 
-    def send(self, value: ValueType) -> YieldType: ...
+    def send(self, value: SendType) -> YieldType: ...
 
-    def throw(self, value: ValueType) -> tx.ValueType: ...
+    def throw(self, value: ReturnType) -> YieldType: ...
 
-    def close(self) -> tx.Optional[tx.ValueType]: ...
+    def close(self) -> tx.Optional[ReturnType]: ...
 
 
 @tx.runtime_checkable
-class Sized(Protocol[T_co]):
+class Sized(tx.Protocol[T_co]):
     """See [collections.abc.Sized][]."""
 
     def __len__(self) -> int: ...
 
 
 @tx.runtime_checkable
-class Collection(Sized[T_co], Iterable[T_co], Container[T_co]):
+class Collection(
+    Sized[T_co], 
+    Iterable[T_co], 
+    Container[T_co], 
+    tx.Protocol[T_co]
+):
     """See [collections.abc.Collection][]."""
 
     ...
 
 
-
 @tx.runtime_checkable
-class Sequence(Reversible[T_co], Collection[T_co]):
+class Sequence(
+    Reversible[T_co], 
+    Collection[T_co], 
+    tx.Protocol[T_co]
+):
     """See [collections.abc.Sequence][]."""
 
     def index(self, value: T_co) -> int: ...
@@ -88,7 +114,7 @@ class Sequence(Reversible[T_co], Collection[T_co]):
 
 
 @tx.runtime_checkable
-class MutableSequence(Sequence[T_co]):
+class MutableSequence(Sequence[T_co], tx.Protocol[T_co]):
     """See [collections.abc.MutableSequence][]."""
 
     def __setitem__(self, index: int, value: T_co) -> None: ...
@@ -112,11 +138,8 @@ class MutableSequence(Sequence[T_co]):
     def __iadd__(self, other: Iterable[T_co]) -> None: ...
 
 
-K_co = tx.TypeVar("K", bound=Hashable)
-
-
 @tx.runtime_checkable
-class Set(Collection[K_co]):
+class Set(Collection[K_co], tx.Protocol[K_co]):
     """See [collections.abc.Set][]."""
 
     def __le__(self, other: tx.Self) -> bool: ...
@@ -147,14 +170,14 @@ class Set(Collection[K_co]):
 
 
 @tx.runtime_checkable
-class MutableSet(Set[K_co]):
+class MutableSet(Set[K_co], tx.Protocol[K_co]):
     """See [collections.abc.MutableSet][]."""
 
     def add(self, value: K_co) -> None: ...
       
     def discard(self, value: K_co) -> None: ...
 
-    def clear(self) -> None:
+    def clear(self) -> None: ...
 
     def pop(self) -> K_co: ...
 
@@ -173,7 +196,7 @@ ItemType = tx.Tuple[K_co, T_co]
 
 
 @tx.runtime_checkable
-class Mapping(Collection[K_co], tx.Generic[K_co, T_co]):
+class Mapping(Collection[K_co], tx.Protocol[K_co, T_co]):
     """See [collections.abc.Mapping][]."""
 
     def __getitem__(self, key: K_co) -> T_co: ...
@@ -192,7 +215,7 @@ class Mapping(Collection[K_co], tx.Generic[K_co, T_co]):
     
   
 @tx.runtime_checkable
-class MutableMapping(Mapping[K_co, T_co]):
+class MutableMapping(Mapping[K_co, T_co], tx.Protocol[T_co]):
     """See [collections.abc.MutableMapping][]."""
 
     def __setitem__(self, key: K_co, value: T_co) -> None: ...
@@ -220,5 +243,6 @@ class Awaitable(tx.Protocol[T_co]):
     
 @tx.runtime_checkable
 class Buffer(tx.Protocol[T_co]):
+    """See [collections.abc.Buffer][]."""
 
     def __buffer__(self, flags: int) -> memoryview: ...

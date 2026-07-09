@@ -1,44 +1,57 @@
+"""
+Immutable collections.
+
+The stdlib hints or abc that are not marked as "Mutable" (such as 
+[collections.abc.MutableSequence][]), represent objects that may or 
+may not be mutable. The type hints in this module represent
+collections that are _specifically_ immutables.
+"""
+__all__ = ["ImmutableSequence", "ImmutableSet", "ImmutableMapping"]
+
 import typing_extensions as tx
 
 from .collections import Sequence, Mapping, Set, Iterable, T_co, K_co
 
 
 @tx.runtime_checkable
-class ImmutableSequence(Sequence[T_co]):
+class ImmutableSequence(Sequence[T_co], tx.Protocol[T_co]):
+    """An immutable [collections.abc.Sequence][]."""
 
-    __setitem__ = tx.NotRequired[Callable[[int, T_co], Never]]
-    __delitem__ = tx.NotRequired[Callable[[int], Never]]
-    insert = tx.NotRequired[Callable[[int, T_co], Never]]
-    append = tx.NotRequired[Callable[[T_co], Never]]
-    extend = tx.NotRequired[Callable[[Iterable[T_co]], Never]]
-    reverse = tx.NotRequired[Callable[[], Never]]
-    clear = tx.NotRequired[Callable[[], Never]]
-    remove = tx.NotRequired[Callable[[T_co], Never]]
-    pop = tx.NotRequired[Callable[[int], Never]]
-    __iadd__ = tx.NotRequired[Callable[[Iterable[T_co]], Never]]
-
-
-@tx.runtime_checkable
-class ImmutableSet(Set[K_co]):
-
-    add = tx.NotRequired[Callable[[K_co], Never]]
-    discard = tx.NotRequired[Callable[[K_co], Never]]
-    clear = tx.NotRequired[Callable[[], Never]]
-    pop = tx.NotRequired[Callable[[], Never]]
-    remove = tx.NotRequired[Callable[[K_co], Never]]
-    __iand__ = tx.NotRequired[Callable[[Set[K_co]], Never]]
-    __ior__ = tx.NotRequired[Callable[[Set[K_co]], Never]]
-    __isub__ = tx.NotRequired[Callable[[Set[K_co]], Never]]
-    __ixor__ = tx.NotRequired[Callable[[Set[K_co]], Never]]
+    __setitem__ = tx.NotRequired[tx.Callable[[int, T_co], tx.Never]]
+    __delitem__ = tx.NotRequired[tx.Callable[[int], tx.Never]]
+    insert = tx.NotRequired[tx.Callable[[int, T_co], tx.Never]]
+    append = tx.NotRequired[tx.Callable[[T_co], tx.Never]]
+    extend = tx.NotRequired[tx.Callable[[Iterable[T_co]], tx.Never]]
+    reverse = tx.NotRequired[tx.Callable[[], tx.Never]]
+    clear = tx.NotRequired[tx.Callable[[], tx.Never]]
+    remove = tx.NotRequired[tx.Callable[[T_co], tx.Never]]
+    pop = tx.NotRequired[tx.Callable[[int], tx.Never]]
+    __iadd__ = tx.NotRequired[tx.Callable[[Iterable[T_co]], tx.Never]]
 
 
 @tx.runtime_checkable
-class ImmutableMapping(Mapping[K_co, T_co]):
+class ImmutableSet(Set[K_co], tx.Protocol[K_co]):
+    """An immutable [collections.abc.Set][]."""
 
-    __setitem__ = tx.NotRequired[Callable[[K_co, T_co], Never]]
-    __delitem__ = tx.NotRequired[Callable[[K_co], Never]]
-    pop = tx.NotRequired[Callable[[K_co, T_co], Never]]
-    popitem = tx.NotRequired[Callable[[K_co], Never]]
-    clear = tx.NotRequired[Callable[[], Never]]
-    update = tx.NotRequired[Callable[[Mapping[K_co, T_co]], Never]]
-    setdefault = tx.NotRequired[Callable[[K_co, T_co], Never]]
+    add = tx.NotRequired[tx.Callable[[K_co], tx.Never]]
+    discard = tx.NotRequired[tx.Callable[[K_co], tx.Never]]
+    clear = tx.NotRequired[tx.Callable[[], tx.Never]]
+    pop = tx.NotRequired[tx.Callable[[], tx.Never]]
+    remove = tx.NotRequired[tx.Callable[[K_co], tx.Never]]
+    __iand__ = tx.NotRequired[tx.Callable[[Set[K_co]], tx.Never]]
+    __ior__ = tx.NotRequired[tx.Callable[[Set[K_co]], tx.Never]]
+    __isub__ = tx.NotRequired[tx.Callable[[Set[K_co]], tx.Never]]
+    __ixor__ = tx.NotRequired[tx.Callable[[Set[K_co]], tx.Never]]
+
+
+@tx.runtime_checkable
+class ImmutableMapping(Mapping[K_co, T_co], tx.Protocol[K_co, T_co]):
+    """An immutable [collections.abc.Mapping][]."""
+
+    __setitem__ = tx.NotRequired[tx.Callable[[K_co, T_co], tx.Never]]
+    __delitem__ = tx.NotRequired[tx.Callable[[K_co], tx.Never]]
+    pop = tx.NotRequired[tx.Callable[[K_co, T_co], tx.Never]]
+    popitem = tx.NotRequired[tx.Callable[[K_co], tx.Never]]
+    clear = tx.NotRequired[tx.Callable[[], tx.Never]]
+    update = tx.NotRequired[tx.Callable[[Mapping[K_co, T_co]], tx.Never]]
+    setdefault = tx.NotRequired[tx.Callable[[K_co, T_co], tx.Never]]

@@ -1,4 +1,5 @@
 """Reusable typing hints for Python projects."""
+__all__ = ["__version__"]
 
 import os
 
@@ -9,65 +10,39 @@ try:
 except ImportError:  # pragma: no cover
     __version__ = "0+unknown"
 
-__all__ = [
-    "__version__",
-    "T",
-    "OneOrIter",
-    "OneOrSeq",
-    "BuiltinSequence",
-    "BuiltinIntegral",
-    "BuiltinReal",
-    "BuiltinNumber",
-    "BuiltinScalar",
-    "BytesLike",
-    "StringLike",
-    "PathLike",
-    "JSONNumber",
-    "JSONNumberLike",
-    "JSONScalar",
-    "JSON",
-    "JSONDict",
-    "FrozenJSON",
-    "FrozenJSONDict",
-    "MutableJSON",
-    "MutableJSONDict",
-]
 
-T = tx.TypeVar("T")
+from . import builtin
+from . import collections
+from . import flexi
+from . import immutable
+from . import json
+from . import strings
+from . import typevars
+from . import unpackable
 
-OneOrIter = tx.Union[T, tx.Iterable[T]]
-OneOrSeq = tx.Union[T, tx.Sequence[T]]
-BuiltinSequence = tx.Union[tx.Tuple[T, ...], tx.List[T]]
+from .builtin import *
+from .collections import *
+from .flexi import *
+from .immutable import *
+from .json import *
+from .strings import *
+from .typevars import *
+from .unpackable import *
 
-BuiltinIntegral: tx.TypeAlias = int
-BuiltinReal: tx.TypeAlias = tx.Union[int, float]
-BuiltinNumber: tx.TypeAlias = tx.Union[BuiltinReal, complex]
-BuiltinScalar: tx.TypeAlias = tx.Union[BuiltinNumber, str]
+from .builtin import __all__ as __all_builtin
+from .collections import __all__ as __all_collections
+from .flexi import __all__ as __all_flexi
+from .immutable import __all__ as __all_immutable
+from .json import __all__ as __all_json
+from .strings import __all__ as __all_strings
+from .typevars import __all__ as __all_typevars
+from .unpackable import __all__ as __all_unpackable
 
-BytesLike: tx.TypeAlias = tx.Union[bytes, bytearray, memoryview]
-StringLike: tx.TypeAlias = tx.Union[str, BytesLike]
-PathLike: tx.TypeAlias = tx.Union[str, os.PathLike]
-
-JSONNumber: tx.TypeAlias = tx.Union[int, float]
-JSONNumberLike: tx.TypeAlias = tx.Union[int, float, bool]
-JSONScalar: tx.TypeAlias = tx.Union[int, float, bool, str, None]
-JSON: tx.TypeAlias = tx.Union[
-    JSONScalar,
-    tx.Mapping[str, "JSON"],
-    BuiltinSequence["JSON"],
-]
-JSONDict: tx.TypeAlias = tx.Mapping[str, JSON]
-
-FrozenJSON: tx.TypeAlias = tx.Union[
-    JSONScalar,
-    tx.Mapping[str, "FrozenJSON"],
-    tx.Tuple["FrozenJSON", ...],
-]
-FrozenJSONDict: tx.TypeAlias = tx.Mapping[str, FrozenJSON]
-
-MutableJSON: tx.TypeAlias = tx.Union[
-    JSONScalar,
-    tx.MutableMapping[str, "MutableJSON"],
-    tx.List["MutableJSON"],
-]
-MutableJSONDict: tx.TypeAlias = tx.MutableMapping[str, MutableJSON]
+__all__ += __all_builtin
+__all__ += __all_collections
+__all__ += __all_flexi
+__all__ += __all_immutable
+__all__ += __all_json
+__all__ += __all_strings
+__all__ += __all_typevars
+__all__ += __all_unpackable
