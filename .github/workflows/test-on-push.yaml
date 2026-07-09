@@ -18,3 +18,5 @@ permissions:
 jobs:
   tests:
     uses: ./.github/workflows/test-matrix.yaml
+    with:
+      requirements-file: requirements-test.txt
