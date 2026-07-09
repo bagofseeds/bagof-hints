@@ -112,8 +112,11 @@ class MutableSequence(Sequence[T_co]):
     def __iadd__(self, other: Iterable[T_co]) -> None: ...
 
 
+K_co = tx.TypeVar("K", bound=Hashable)
+
+
 @tx.runtime_checkable
-class Set(Collection[T_co]):
+class Set(Collection[K_co]):
     """See [collections.abc.Set][]."""
 
     def __le__(self, other: tx.Self) -> bool: ...
@@ -140,22 +143,22 @@ class Set(Collection[T_co]):
 
     def __rxor__(self, other: tx.Self) -> tx.Self: ...
 
-    def isdisjoint(self, other: Iterable[T_co]) -> bool: ...
+    def isdisjoint(self, other: Iterable[K_co]) -> bool: ...
 
 
 @tx.runtime_checkable
-class MutableSet(Set[T_co]):
+class MutableSet(Set[K_co]):
     """See [collections.abc.MutableSet][]."""
 
-    def add(self, value: T_co) -> None: ...
+    def add(self, value: K_co) -> None: ...
       
-    def discard(self, value: T_co) -> None: ...
+    def discard(self, value: K_co) -> None: ...
 
     def clear(self) -> None:
 
-    def pop(self) -> T_co: ...
+    def pop(self) -> K_co: ...
 
-    def remove(self, value: T_co) -> None: ...
+    def remove(self, value: K_co) -> None: ...
 
     def __iand__(self, other: tx.Self) -> tx.Self: ...
 
@@ -166,7 +169,6 @@ class MutableSet(Set[T_co]):
     def __ixor__(self, other: tx.Self) -> tx.Self: ...
 
 
-K_co = tx.TypeVar("K", bound=Hashable)
 ItemType = tx.Tuple[K_co, T_co]
 
 
@@ -192,8 +194,6 @@ class Mapping(Collection[K_co], tx.Generic[K_co, T_co]):
 @tx.runtime_checkable
 class MutableMapping(Mapping[K_co, T_co]):
     """See [collections.abc.MutableMapping][]."""
-
-    def __getitem__(self, key: K_co) -> T_co: ...
 
     def __setitem__(self, key: K_co, value: T_co) -> None: ...
 
