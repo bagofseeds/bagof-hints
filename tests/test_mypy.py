@@ -67,6 +67,7 @@ def test_mypy_valid(tmp_path: Path, line: tx.Iterable[str]) -> None:
     hint, value, *imports = line
     statement = f"x: {hint} = {value}"
     text = "\n".join([*imports, statement])
+    print(text)
     path.write_text(text, encoding="utf-8")
 
     result = run_mypy(path)

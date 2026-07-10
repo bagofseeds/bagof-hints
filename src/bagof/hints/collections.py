@@ -21,7 +21,7 @@ __all__ = [
 
 import typing_extensions as tx
 
-from .typevars import K_co, T_co
+from .typevars.co import K as K_co, T as T_co
 
 
 @tx.runtime_checkable

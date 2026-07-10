@@ -12,7 +12,7 @@ __all__ = [
 
 import typing_extensions as tx
 
-from .typevars import T_co
+from .typevars.co import T as T_co
 
 BuiltinSequence: tx.TypeAlias = tx.Union[tx.Tuple[T_co, ...], tx.List[T_co]]
 """Tuple or List, where all elements have the same type."""

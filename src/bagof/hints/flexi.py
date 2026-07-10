@@ -3,7 +3,8 @@ __all__ = ["OneOrIter", "OneOrSeq"]
 
 import typing_extensions as tx
 
-from .typevars import T_co
+from .typevars.co import T as T_co
+# T_co = tx.TypeVar("T_co", covariant=True, default=tx.Any)
 
 OneOrIter: tx.TypeAlias = tx.Union[T_co, tx.Iterable[T_co]]
 """A value of a given type, or an iterable of this type."""

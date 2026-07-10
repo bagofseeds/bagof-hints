@@ -10,7 +10,8 @@ __all__ = ["ImmutableSequence", "ImmutableSet", "ImmutableMapping"]
 
 import typing_extensions as tx
 
-from .collections import Iterable, K_co, Mapping, Sequence, Set, T_co
+from .collections import Iterable, Mapping, Sequence, Set
+from .typevars.co import K as K_co, T as T_co
 
 
 @tx.runtime_checkable

@@ -3,7 +3,7 @@ __all__ = ["Unpackable"]
 
 import typing_extensions as tx
 
-from .typevars import T_co
+from .typevars.co import T as T_co
 
 
 class Unpackable(tx.Protocol[T_co]):
