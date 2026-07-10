@@ -1,5 +1,5 @@
 """Reusable TypeVars."""
-__all__ = ["T_co", "T_contra"]
+__all__ = ["T_co", "T_contra", "K_co", "K_contra"]
 
 import typing_extensions as tx
 
