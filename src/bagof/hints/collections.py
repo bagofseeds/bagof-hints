@@ -18,11 +18,10 @@ __all__ = [
     "Buffer",
 ]
 
-from types import TracebackType
 
 import typing_extensions as tx
 
-from .typevars import T_co, K_co
+from .typevars import K_co, T_co
 
 
 @tx.runtime_checkable
@@ -67,7 +66,7 @@ ReturnType = tx.TypeVar("ReturnType", covariant=True, default=None)
 
 @tx.runtime_checkable
 class Generator(
-  Iterator[YieldType], 
+  Iterator[YieldType],
   tx.Protocol[YieldType, SendType, ReturnType]
 ):
     """See [collections.abc.Generator][]."""
@@ -88,9 +87,9 @@ class Sized(tx.Protocol[T_co]):
 
 @tx.runtime_checkable
 class Collection(
-    Sized[T_co], 
-    Iterable[T_co], 
-    Container[T_co], 
+    Sized[T_co],
+    Iterable[T_co],
+    Container[T_co],
     tx.Protocol[T_co]
 ):
     """See [collections.abc.Collection][]."""
@@ -100,8 +99,8 @@ class Collection(
 
 @tx.runtime_checkable
 class Sequence(
-    Reversible[T_co], 
-    Collection[T_co], 
+    Reversible[T_co],
+    Collection[T_co],
     tx.Protocol[T_co]
 ):
     """See [collections.abc.Sequence][]."""
@@ -174,7 +173,7 @@ class MutableSet(Set[K_co], tx.Protocol[K_co]):
     """See [collections.abc.MutableSet][]."""
 
     def add(self, value: K_co) -> None: ...
-      
+
     def discard(self, value: K_co) -> None: ...
 
     def clear(self) -> None: ...
@@ -212,8 +211,8 @@ class Mapping(Collection[K_co], tx.Protocol[K_co, T_co]):
     def __eq__(self, other: tx.Self) -> bool: ...
 
     def __ne__(self, other: tx.Self) -> bool: ...
-    
-  
+
+
 @tx.runtime_checkable
 class MutableMapping(Mapping[K_co, T_co], tx.Protocol[T_co]):
     """See [collections.abc.MutableMapping][]."""
@@ -233,14 +232,13 @@ class MutableMapping(Mapping[K_co, T_co], tx.Protocol[T_co]):
     def setdefault(self, key: K_co, value: T_co) -> None: ...
 
 
-  
 @tx.runtime_checkable
 class Awaitable(tx.Protocol[T_co]):
     """See [collections.abc.Awaitable][]."""
 
     def __await__(self) -> tx.Iterator[T_co]: ...
 
-    
+
 @tx.runtime_checkable
 class Buffer(tx.Protocol[T_co]):
     """See [collections.abc.Buffer][]."""

@@ -2,12 +2,12 @@
 
 from __future__ import annotations
 
-import pytest
 import subprocess
 import sys
-import textwrap
-import typing_extensions as tx
 from pathlib import Path
+
+import pytest
+import typing_extensions as tx
 
 
 def run_mypy(path: Path) -> subprocess.CompletedProcess[str]:
@@ -30,21 +30,33 @@ def run_mypy(path: Path) -> subprocess.CompletedProcess[str]:
 
 
 VALID = [  # (VAR, HINT, VALUE, [IMPORT])
-    ('JSON', '{"items": [1, "two", False, None]}', 'from bagof.hints import JSON'),
-    ('JSONDict', '{"items": [1, "two"]}', 'from bagof.hints import JSONDict'),
-    ('MutableJSONDict', '{"items": [1, "two"]}', 'from bagof.hints import MutableJSONDict'),
-    ('PathLike', 'Path("demo.txt")', 'from pathlib import Path', 'from bagof.hints import PathLike'),
-    ('StringLike', 'memoryview(b"abc")', 'from bagof.hints import StringLike'),
-    ('OneOrIter[int]', '(1, 2, 3)', 'from bagof.hints import OneOrIter'),
-    ('OneOrSeq[int]', '[1, 2, 3]', 'from bagof.hints import OneOrSeq'),
-    ('BuiltinSequence[int]', '(1, 2, 3)', 'from bagof.hints import BuiltinSequence'),
+    ('JSON', '{"items": [1, "two", False, None]}',
+     'from bagof.hints import JSON'),
+    ('JSONDict', '{"items": [1, "two"]}',
+     'from bagof.hints import JSONDict'),
+    ('MutableJSONDict', '{"items": [1, "two"]}',
+     'from bagof.hints import MutableJSONDict'),
+    ('PathLike', 'Path("demo.txt")',
+     'from pathlib import Path', 'from bagof.hints import PathLike'),
+    ('StringLike', 'memoryview(b"abc")',
+     'from bagof.hints import StringLike'),
+    ('OneOrIter[int]', '(1, 2, 3)',
+     'from bagof.hints import OneOrIter'),
+    ('OneOrSeq[int]', '[1, 2, 3]',
+     'from bagof.hints import OneOrSeq'),
+    ('BuiltinSequence[int]', '(1, 2, 3)',
+     'from bagof.hints import BuiltinSequence'),
 ]
 
 INVALID = [
-    ('JSON', '{1: "value"}', 'from bagof.hints import JSON'),
-    ('JSONDict', '{"ok": {1: "value"}}', 'from bagof.hints import JSONDict'),
-    ('PathLike', '3', 'from bagof.hints import PathLike'),
-    ('BuiltinSequence[int]', '{1, 2}', 'from bagof.hints import BuiltinSequence'),
+    ('JSON', '{1: "value"}',
+     'from bagof.hints import JSON'),
+    ('JSONDict', '{"ok": {1: "value"}}',
+     'from bagof.hints import JSONDict'),
+    ('PathLike', '3',
+     'from bagof.hints import PathLike'),
+    ('BuiltinSequence[int]', '{1, 2}',
+     'from bagof.hints import BuiltinSequence'),
 ]
 
 

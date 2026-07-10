@@ -1,16 +1,16 @@
 """
 Immutable collections.
 
-The stdlib hints or abc that are not marked as "Mutable" (such as 
-[collections.abc.MutableSequence][]), represent objects that may or 
+The stdlib hints or abc that are not marked as "Mutable" (such as
+[collections.abc.MutableSequence][]), represent objects that may or
 may not be mutable. The type hints in this module represent
-collections that are _specifically_ immutables.
+collections that are _specifically_ immutables
 """
 __all__ = ["ImmutableSequence", "ImmutableSet", "ImmutableMapping"]
 
 import typing_extensions as tx
 
-from .collections import Sequence, Mapping, Set, Iterable, T_co, K_co
+from .collections import Iterable, K_co, Mapping, Sequence, Set, T_co
 
 
 @tx.runtime_checkable
