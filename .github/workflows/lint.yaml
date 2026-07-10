@@ -28,18 +28,15 @@ permissions:
   contents: read
 
 jobs:
+  
   ruff:
-    uses: bagofseeds/actions/.github/workflows/lint.yaml@main
+    uses: bagofseeds/actions/.github/workflows/ruff.yaml@main
     with:
       tag: ${{ inputs.tag }}
       python-version: ${{ inputs.python-version }}
-      requirements-file: requirements-lint.txt
-      lint-command: ruff check .
 
   spellcheck:
-    uses: bagofseeds/actions/.github/workflows/lint.yaml@main
+    uses: bagofseeds/actions/.github/workflows/spellcheck.yaml@main
     with:
       tag: ${{ inputs.tag }}
       python-version: ${{ inputs.python-version }}
-      requirements-file: requirements-lint.txt
-      lint-command: codespell .
