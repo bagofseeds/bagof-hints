@@ -2,6 +2,23 @@
 
 nav = [
   {"Home" = "index.md"},
+  {"API" = [
+    "api/index.md",
+    {"builin" = "api/builtin.md"},
+    {"collections" = "api/collections.md"},
+    {"flexi" = "api/flexi.md"},
+    {"immutable" = "api/immutable.md"},
+    {"json" = "api/json.md"},
+    {"strings" = "api/strings.md"},
+    {"typevars" = [
+      "api/typevars.md",
+      {"co" = "api/typevars_co.md"},
+      {"contra" = "api/typevars_contra.md"},
+      {"inv" = "api/typevars_inv.md"},
+      {"infer" = "api/typevars_infer.md"},
+    ]},
+    {"unpackable" = "api/unpackable.md"},
+  ]}
 ]
 
 # The site_name is shown in the page header and the browser window title

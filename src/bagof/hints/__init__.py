@@ -1,4 +1,25 @@
-"""Reusable typing hints for Python projects."""
+"""
+Reusable typing hints for Python projects.
+
+Modules
+-------
+builtin
+    Builtin types (such as builtin subsets of [collections.abc][]).
+collections
+    Protocols that are compatible with [collections.abc][].
+flexi
+    Flexible "type-like" for use in converters.
+immutable
+    Immutable collections.
+json
+    Types related to JSON (de)serialization.
+strings
+    String-like objects."
+typevars
+    Reusable TypeVars.
+unpackable
+    Objects unpackable into keyword arguments.
+"""
 __all__ = [
     "__version__",
     "builtin",

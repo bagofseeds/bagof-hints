@@ -1,4 +1,4 @@
-"""Protocols that are compatible with collections.abc"""
+"""Protocols that are compatible with `collections.abc`"""
 __all__ = [
     "Container",
     "Hashable",
