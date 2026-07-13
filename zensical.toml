@@ -11,11 +11,11 @@ nav = [
     {"json" = "api/json.md"},
     {"strings" = "api/strings.md"},
     {"typevars" = [
-      "api/typevars.md",
-      {"co" = "api/typevars_co.md"},
-      {"contra" = "api/typevars_contra.md"},
-      {"inv" = "api/typevars_inv.md"},
-      {"infer" = "api/typevars_infer.md"},
+      "api/typevars/index.md",
+      {"co" = "api/typevars/co.md"},
+      {"contra" = "api/typevars/contra.md"},
+      {"inv" = "api/typevars/inv.md"},
+      {"infer" = "api/typevars/infer.md"},
     ]},
     {"unpackable" = "api/unpackable.md"},
   ]}

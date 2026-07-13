@@ -2,9 +2,9 @@
 Immutable collections.
 
 The stdlib hints or abc that are not marked as "Mutable" (such as
-[collections.abc.MutableSequence][]), represent objects that may or
-may not be mutable. The type hints in this module represent
-collections that are _specifically_ immutables
+[`collections.abc.MutableSequence`][collections.abc.MutableSequence]),
+represent objects that may or may not be mutable. The type hints in this
+module represent collections that are _specifically_ immutables
 """
 __all__ = ["ImmutableSequence", "ImmutableSet", "ImmutableMapping"]
 
@@ -17,7 +17,7 @@ from .typevars.co import T as T_co
 
 @tx.runtime_checkable
 class ImmutableSequence(Sequence[T_co], tx.Protocol[T_co]):
-    """An immutable [collections.abc.Sequence][]."""
+    """An immutable [`collections.abc.Sequence`][collections.abc.Sequence]."""
 
     __setitem__ = tx.NotRequired[tx.Callable[[int, T_co], tx.Never]]
     __delitem__ = tx.NotRequired[tx.Callable[[int], tx.Never]]
@@ -33,7 +33,7 @@ class ImmutableSequence(Sequence[T_co], tx.Protocol[T_co]):
 
 @tx.runtime_checkable
 class ImmutableSet(Set[K_co], tx.Protocol[K_co]):
-    """An immutable [collections.abc.Set][]."""
+    """An immutable [`collections.abc.Set`][collections.abc.Set]."""
 
     add = tx.NotRequired[tx.Callable[[K_co], tx.Never]]
     discard = tx.NotRequired[tx.Callable[[K_co], tx.Never]]
@@ -48,7 +48,7 @@ class ImmutableSet(Set[K_co], tx.Protocol[K_co]):
 
 @tx.runtime_checkable
 class ImmutableMapping(Mapping[K_co, T_co], tx.Protocol[K_co, T_co]):
-    """An immutable [collections.abc.Mapping][]."""
+    """An immutable [`collections.abc.Mapping`][collections.abc.Mapping]."""
 
     __setitem__ = tx.NotRequired[tx.Callable[[K_co, T_co], tx.Never]]
     __delitem__ = tx.NotRequired[tx.Callable[[K_co], tx.Never]]
