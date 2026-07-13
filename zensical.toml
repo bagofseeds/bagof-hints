@@ -4,7 +4,7 @@ nav = [
   {"Home" = "index.md"},
   {"API" = [
     "api/index.md",
-    {"builin" = "api/builtin.md"},
+    {"builtin" = "api/builtin.md"},
     {"collections" = "api/collections.md"},
     {"flexi" = "api/flexi.md"},
     {"immutable" = "api/immutable.md"},
