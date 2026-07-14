@@ -13,9 +13,9 @@ import collections.abc  # noqa: F401
 
 import typing_extensions as tx
 
+from ._internal.typevars.co import K as K_co
+from ._internal.typevars.co import T as T_co
 from .collections import Iterable, Mapping, Sequence, Set
-from .typevars.co import K as K_co
-from .typevars.co import T as T_co
 
 
 @tx.runtime_checkable

@@ -14,7 +14,7 @@ immutable
 json
     Types related to JSON (de)serialization.
 strings
-    String-like objects."
+    String-like objects.
 typevars
     Reusable TypeVars.
 unpackable

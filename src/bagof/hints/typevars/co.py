@@ -1,9 +1,142 @@
-__all__ = ["T", "K"]
+__all__ = [
+    "T",
+    "K",
+    "NONE",
+    "STR",
+    "BYTES",
+    "BOOL",
+    "INT",
+    "FLOAT",
+    "COMPLEX",
+    "INTEGRAL",
+    "REAL",
+    "NUMBER",
+    "CONTAINER",
+    "HASHABLE",
+    "ITERABLE",
+    "ITERATOR",
+    "REVERSIBLE",
+    "GENERATOR",
+    "SIZED",
+    "COLLECTION",
+    "SEQUENCE",
+    "MUTABLE_SEQUENCE",
+    "SET",
+    "MUTABLE_SET",
+    "MAPPING",
+    "MUTABLE_MAPPING",
+    "AWAITABLE",
+    "BUFFER",
+    "LIST",
+    "TUPLE",
+    "DICT",
+]
+
+import numbers
 
 import typing_extensions as tx
 
-T = tx.TypeVar("T", covariant=True, default=tx.Any)
-"""A covariant TypeVar."""
+from .._internal.compat import NoneType, np, npt
+from .._internal.typevars.co import K, T
 
-K = tx.TypeVar("K", covariant=True, bound=tx.Hashable)
+NONE = tx.TypeVar("NONE", covariant=True, bound=NoneType)
+"""A covariant TypeVar for None values."""
+
+STR = tx.TypeVar("STR", covariant=True, bound=str)
+"""A covariant TypeVar for strings."""
+
+BYTES = tx.TypeVar("BYTES", covariant=True, bound=bytes)
+"""A covariant TypeVar for bytes."""
+
+BOOL = tx.TypeVar("BOOL", covariant=True, bound=bool)
+"""A covariant TypeVar for booleans."""
+
+INT = tx.TypeVar("INT", covariant=True, bound=int)
+"""A covariant TypeVar for (builtin) ints."""
+
+FLOAT = tx.TypeVar("FLOAT", covariant=True, bound=float)
+"""A covariant TypeVar for (builtin) floats."""
+
+COMPLEX = tx.TypeVar("COMPLEX", covariant=True, bound=complex)
+"""A covariant TypeVar for (builtin) complex numbers."""
+
+INTEGRAL = tx.TypeVar("INTEGRAL", covariant=True, bound=numbers.Integral)
+"""A covariant TypeVar for integral numbers."""
+
+REAL = tx.TypeVar("REAL", covariant=True, bound=numbers.Real)
+"""A covariant TypeVar for real numbers."""
+
+NUMBER = tx.TypeVar("NUMBER", covariant=True, bound=numbers.Number)
+"""A covariant TypeVar for numeric values."""
+
+CONTAINER = tx.TypeVar("CONTAINER", covariant=True, bound=tx.Container)
+"""A covariant TypeVar for containers."""
+
+HASHABLE = tx.TypeVar("HASHABLE", covariant=True, bound=tx.Hashable)
 """A covariant hashable TypeVar."""
+
+ITERABLE = tx.TypeVar("ITERABLE", covariant=True, bound=tx.Iterable)
+"""A covariant TypeVar for iterables."""
+
+ITERATOR = tx.TypeVar("ITERATOR", covariant=True, bound=tx.Iterator)
+"""A covariant TypeVar for iterators."""
+
+REVERSIBLE = tx.TypeVar("REVERSIBLE", covariant=True, bound=tx.Reversible)
+"""A covariant TypeVar for reversibles."""
+
+GENERATOR = tx.TypeVar("GENERATOR", covariant=True, bound=tx.Generator)
+"""A covariant TypeVar for generators."""
+
+SIZED = tx.TypeVar("SIZED", covariant=True, bound=tx.Sized)
+"""A covariant TypeVar for sized objects."""
+
+COLLECTION = tx.TypeVar("COLLECTION", covariant=True, bound=tx.Collection)
+"""A covariant TypeVar for collections."""
+
+SEQUENCE = tx.TypeVar("SEQUENCE", covariant=True, bound=tx.Sequence)
+"""A covariant TypeVar for sequences."""
+
+MUTABLE_SEQUENCE = tx.TypeVar(
+    "MUTABLE_SEQUENCE", covariant=True, bound=tx.MutableSequence)
+"""A covariant TypeVar for mutable sequences."""
+
+SET = tx.TypeVar("SET", covariant=True, bound=tx.Set)
+"""A covariant TypeVar for sets."""
+
+MUTABLE_SET = tx.TypeVar(
+    "MUTABLE_SET", covariant=True, bound=tx.MutableSet)
+"""A covariant TypeVar for mutable sets."""
+
+MAPPING = tx.TypeVar("MAPPING", covariant=True, bound=tx.Mapping)
+"""A covariant TypeVar for mappings."""
+
+MUTABLE_MAPPING = tx.TypeVar(
+    "MUTABLE_MAPPING", covariant=True, bound=tx.MutableMapping)
+"""A covariant TypeVar for mutable mappings."""
+
+AWAITABLE = tx.TypeVar("AWAITABLE", covariant=True, bound=tx.Awaitable)
+"""A covariant TypeVar for awaitables."""
+
+BUFFER = tx.TypeVar("BUFFER", covariant=True, bound=tx.Buffer)
+"""A covariant TypeVar for buffers."""
+
+LIST = tx.TypeVar("LIST", covariant=True, bound=tx.List)
+"""A covariant TypeVar for lists."""
+
+TUPLE = tx.TypeVar("TUPLE", covariant=True, bound=tx.Tuple)
+"""A covariant TypeVar for tuples."""
+
+DICT = tx.TypeVar("DICT", covariant=True, bound=tx.Dict)
+"""A covariant TypeVar for dictionaries."""
+
+if tx.TYPE_CHECKING or np:
+    DTYPE = tx.TypeVar("DTYPE", covariant=True, bound=np.dtype)
+    """A covariant TypeVar for numpy dtypes."""
+
+    __all__.append("DTYPE")
+
+if tx.TYPE_CHECKING or npt:
+    DTYPELIKE = tx.TypeVar("DTYPELIKE", covariant=True, bound=npt.DTypeLike)
+    """A covariant TypeVar for things that can be converted to numpy dtypes."""
+
+    __all__.append("DTYPELIKE")

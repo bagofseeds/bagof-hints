@@ -1,4 +1,4 @@
-"""Protocols that are compatible with `collections.abc`"""
+"""Protocols that are compatible with [`collections.abc`][]"""
 __all__ = [
     "Container",
     "Hashable",
@@ -22,8 +22,8 @@ import collections.abc  # noqa: F401
 
 import typing_extensions as tx
 
-from .typevars.co import K as K_co
-from .typevars.co import T as T_co
+from ._internal.typevars.co import K as K_co
+from ._internal.typevars.co import T as T_co
 
 
 @tx.runtime_checkable

@@ -3,7 +3,7 @@ __all__ = ["OneOrIter", "OneOrSeq"]
 
 from typing_extensions import Iterable, Sequence, TypeAlias, Union
 
-from .typevars.co import T as T_co
+from ._internal.typevars.co import T as T_co
 
 OneOrIter: TypeAlias = Union[T_co, Iterable[T_co]]
 """A value of a given type, or an iterable of this type."""

@@ -125,6 +125,12 @@ allow_inspection = true
 filters = "public"
 group_by_category = true
 show_category_heading = true
+preload_modules = [
+  "bagof.hints._internal.typevars.co",
+  "bagof.hints._internal.typevars.contra",
+  "bagof.hints._internal.typevars.infer",
+  "bagof.hints._internal.typevars.inv"
+]
 
 # ----------------------------------------------------------------------------
 # Markdown extras
