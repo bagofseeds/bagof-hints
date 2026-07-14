@@ -195,7 +195,7 @@ class MutableSet(Set[K_co], tx.Protocol[K_co]):
     def __ixor__(self, other: tx.Self) -> tx.Self: ...
 
 
-ItemType = tx.Tuple[K_co, T_co]
+ItemType: tx.TypeAlias = tx.Tuple[K_co, T_co]
 
 
 @tx.runtime_checkable

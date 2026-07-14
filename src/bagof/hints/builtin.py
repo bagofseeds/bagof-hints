@@ -16,7 +16,6 @@ from typing_extensions import List, Tuple, TypeAlias, Union
 
 from .typevars.co import T as T_co
 
-
 BuiltinSequence: TypeAlias = Union[Tuple[T_co, ...], List[T_co]]
 """Tuple or List, where all elements have the same type."""
 

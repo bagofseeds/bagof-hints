@@ -12,26 +12,26 @@ __all__ = [
 # Import stdlib so that mkdocstring correctly resolves cross-references
 import json  # noqa: F401
 
-import typing_extensions as tx
+from typing_extensions import Dict, List, Mapping, TypeAlias, Union
 
 from .builtin import BuiltinSequence
 
-JSONNumber: tx.TypeAlias = tx.Union[int, float]
+JSONNumber: TypeAlias = Union[int, float]
 """
 A number that is properly handled by [`json.dump`][]:
 `#!python (int | float)`.
 """
 
-JSONScalar: tx.TypeAlias = tx.Union[int, float, bool, str, None]
+JSONScalar: TypeAlias = Union[int, float, bool, str, None]
 """
 A scalar that is properly handled by [`json.dump`][]:
 `#!python (int | float | str | None)`.
 """
 
-JSON: tx.TypeAlias = tx.Union[
-    # Not a tx.TypeAlias because of recursion
+JSON: TypeAlias = Union[
+    # Not a TypeAlias because of recursion
     JSONScalar,
-    tx.Mapping[str, "JSON"],
+    Mapping[str, "JSON"],
     BuiltinSequence["JSON"],
 ]
 """
@@ -40,28 +40,28 @@ A value that is properly handled by [`json.dump`][]:
 Note that this is a recursive type.
 """
 
-JSONDict: tx.TypeAlias = tx.Mapping[str, JSON]
+JSONDict: TypeAlias = Mapping[str, JSON]
 """A JSON dictionary."""
 
-MutableJSON: tx.TypeAlias = tx.Union[
-    # Not a tx.TypeAlias because of recursion
+MutableJSON: TypeAlias = Union[
+    # Not a TypeAlias because of recursion
     JSONScalar,
-    tx.Dict[str, "MutableJSON"],
-    tx.List["MutableJSON"],
+    Dict[str, "MutableJSON"],
+    List["MutableJSON"],
 ]
 """A JSON value, where all structures (arrays and objects) are mutable."""
 
-MutableJSONDict: tx.TypeAlias = tx.Dict[str, MutableJSON]
+MutableJSONDict: TypeAlias = Dict[str, MutableJSON]
 """A mutable JSON dictionary."""
 
 
-# ImmutableJSON: tx.TypeAlias = tx.Union[
-#     # Not a tx.TypeAlias because of recursion
+# ImmutableJSON: TypeAlias = Union[
+#     # Not a TypeAlias because of recursion
 #     JSONScalar,
 #     ImmutableMapping[str, "ImmutableJSON"],
-#     tx.Tuple["ImmutableJSON", ...],
+#     Tuple["ImmutableJSON", ...],
 # ]
 # """A JSON value, where all structures (arrays and objects) are immutable."""
 #
-# ImmutableJSONDict: tx.TypeAlias = ImmutableMapping[str, ImmutableJSON]
+# ImmutableJSONDict: TypeAlias = ImmutableMapping[str, ImmutableJSON]
 # """An immutable JSON dictionary."""

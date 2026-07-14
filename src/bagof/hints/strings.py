@@ -3,15 +3,15 @@ __all__ = ["BytesLike", "StringLike", "PathLike"]
 
 import os
 
-import typing_extensions as tx
+from typing_extensions import TypeAlias, Union
 
-BytesLike: tx.TypeAlias = tx.Union[bytes, bytearray, memoryview]
+BytesLike: TypeAlias = Union[bytes, bytearray, memoryview]
 """
 Different bytes representations: `#!python (bytes | bytearray | memoryview)`.
 """
 
-StringLike: tx.TypeAlias = tx.Union[str, BytesLike]
+StringLike: TypeAlias = Union[str, BytesLike]
 """Strings or bytes: `#!python (str | bytes | bytearray | memoryview)`."""
 
-PathLike: tx.TypeAlias = tx.Union[str, os.PathLike]
+PathLike: TypeAlias = Union[str, os.PathLike]
 """Strings or paths: `#!python (str | PathLike)`."""

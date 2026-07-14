@@ -83,10 +83,11 @@ target-version = "py38"
 [tool.ruff.lint]
 select = ["ANN", "B", "E", "F", "I", "UP", "W"]
 ignore = [
-    "ANN002",
-    "ANN003",
-    "ANN401",
-    "UP006",
+    "ANN002",   # Do not type *args
+    "ANN003",   # Do not type *kwargs
+    "ANN401",   # Allow typing with Any
+    "UP006",    # Old-style collections hints (List instead of list)
+    "UP035",    # Use `typing_extensions` instead of `typing`
 ]
 
 [tool.codespell]
