@@ -39,6 +39,12 @@ import typing_extensions as tx
 from .._internal.compat import NoneType, np, npt
 from .._internal.typevars.infer import K, T
 
+OBJECT = tx.TypeVar("OBJECT", infer_variance=True, bound=object)
+"""A inferable TypeVar for objects."""
+
+TYPE = tx.TypeVar("TYPE", infer_variance=True, bound=type)
+"""A inferable TypeVar for types."""
+
 NONE = tx.TypeVar("NONE", infer_variance=True, bound=NoneType)
 """A inferable TypeVar for None values."""
 
