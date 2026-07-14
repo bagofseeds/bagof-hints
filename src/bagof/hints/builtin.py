@@ -1,5 +1,5 @@
 """
-Builtin types (such as builtin subsets of `collections.abc`).
+Builtin types (such as builtin subsets of [`collections.abc`][]).
 """
 
 __all__ = [
@@ -9,25 +9,30 @@ __all__ = [
     "BuiltinNumber",
     "BuiltinScalar",
 ]
+# Import stdlib so that mkdocstring correctly resolves cross-references
+import collections.abc  # noqa: F401
 
-import typing_extensions as tx
+from typing_extensions import List, Tuple, TypeAlias, Union
 
 from .typevars.co import T as T_co
 
-BuiltinSequence: tx.TypeAlias = tx.Union[tx.Tuple[T_co, ...], tx.List[T_co]]
+
+BuiltinSequence: TypeAlias = Union[Tuple[T_co, ...], List[T_co]]
 """Tuple or List, where all elements have the same type."""
 
-BuiltinIntegral: tx.TypeAlias = int
+BuiltinIntegral: TypeAlias = int
 """
-The builtin integral type: `int`.
-Note that `bool` is a subtype of `int` and is therefore covered here.
+The builtin integral type: `#!python int`.
+
+Note that `#!python bool` is a subtype of `#!python int` and is therefore
+covered here.
 """
 
-BuiltinReal: tx.TypeAlias = tx.Union[BuiltinIntegral, float]
-"""Any builtin real number: `int | float`."""
+BuiltinReal: TypeAlias = Union[BuiltinIntegral, float]
+"""Any builtin real number: `#!python (int | float)`."""
 
-BuiltinNumber: tx.TypeAlias = tx.Union[BuiltinReal, complex]
-"""Any builtin number: `int | float | complex`."""
+BuiltinNumber: TypeAlias = Union[BuiltinReal, complex]
+"""Any builtin number: `#!python (int | float | complex)`."""
 
-BuiltinScalar: tx.TypeAlias = tx.Union[BuiltinNumber, str]
-"""Any builtin "scalar": `int | float | complex | str`."""
+BuiltinScalar: TypeAlias = Union[BuiltinNumber, str]
+"""Any builtin "scalar": `#!python (int | float | complex | str)`."""

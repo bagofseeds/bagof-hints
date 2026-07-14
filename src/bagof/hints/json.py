@@ -9,6 +9,8 @@ __all__ = [
     # "ImmutableJSON",
     # "ImmutableJSONDict",
 ]
+# Import stdlib so that mkdocstring correctly resolves cross-references
+import json  # noqa: F401
 
 import typing_extensions as tx
 
@@ -16,14 +18,14 @@ from .builtin import BuiltinSequence
 
 JSONNumber: tx.TypeAlias = tx.Union[int, float]
 """
-A number that is properly handled by [`json.dump`][json.dump]:
-`(int | float)`.
+A number that is properly handled by [`json.dump`][]:
+`#!python (int | float)`.
 """
 
 JSONScalar: tx.TypeAlias = tx.Union[int, float, bool, str, None]
 """
-A scalar that is properly handled by [`json.dump`][json.dump]:
-`(int | float | str | None)`.
+A scalar that is properly handled by [`json.dump`][]:
+`#!python (int | float | str | None)`.
 """
 
 JSON: tx.TypeAlias = tx.Union[
@@ -33,8 +35,8 @@ JSON: tx.TypeAlias = tx.Union[
     BuiltinSequence["JSON"],
 ]
 """
-A value that is properly handled by [`json.dump`][json.dump]:
-`JSON = JSONScalar | Dict[str, JSON] | List[JSON] | Tuple[JSON, ...]`.
+A value that is properly handled by [`json.dump`][]:
+`#!python JSON = JSONScalar | Dict[str, JSON] | List[JSON] | Tuple[JSON, ...]`.
 Note that this is a recursive type.
 """
 

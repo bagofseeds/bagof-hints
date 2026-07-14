@@ -6,10 +6,12 @@ import os
 import typing_extensions as tx
 
 BytesLike: tx.TypeAlias = tx.Union[bytes, bytearray, memoryview]
-"""Different bytes representations: `(bytes | bytearray | memoryview)`."""
+"""
+Different bytes representations: `#!python (bytes | bytearray | memoryview)`.
+"""
 
 StringLike: tx.TypeAlias = tx.Union[str, BytesLike]
-"""Strings or bytes: `(str | bytes | bytearray | memoryview)`."""
+"""Strings or bytes: `#!python (str | bytes | bytearray | memoryview)`."""
 
 PathLike: tx.TypeAlias = tx.Union[str, os.PathLike]
-"""Strings or paths: `(str | PathLike)`."""
+"""Strings or paths: `#!python (str | PathLike)`."""

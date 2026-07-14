@@ -2,14 +2,12 @@
 
 Modules
 -------
+inv
+    Invariant TypeVars.
 co
     Covariant TypeVars.
 contra
-    Covariant TypeVars.
-contra
     Contravariant TypeVars.
-inv
-    Invariant TypeVars.
 infer
     TypeVars with inferred variance.
 """
