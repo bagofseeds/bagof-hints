@@ -37,6 +37,8 @@ site_description = "A bag full of type hints."
 site_author = "Yael Balbastre"
 
 site_url = "https://bagofseeds.github.io/bagof-hints/"
+repo_url = "https://github.com/bagofseeds/bagof-hints"
+repo_name = "bagofseeds/bagof-hints"
 
 copyright = """
 Copyright &copy; 2026 The authors
