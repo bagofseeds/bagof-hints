@@ -14,7 +14,6 @@ SUBMODULES = [
     "builtin",
     "collections",
     "flexi",
-    "immutable",
     "json",
     "strings",
     "unpackable",

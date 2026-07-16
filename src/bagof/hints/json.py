@@ -6,8 +6,6 @@ __all__ = [
     "JSONDict",
     "MutableJSON",
     "MutableJSONDict",
-    # "ImmutableJSON",
-    # "ImmutableJSONDict",
 ]
 # Import stdlib so that mkdocstring correctly resolves cross-references
 import json  # noqa: F401
@@ -53,15 +51,3 @@ MutableJSON: TypeAlias = Union[
 
 MutableJSONDict: TypeAlias = Dict[str, MutableJSON]
 """A mutable JSON dictionary."""
-
-
-# ImmutableJSON: TypeAlias = Union[
-#     # Not a TypeAlias because of recursion
-#     JSONScalar,
-#     ImmutableMapping[str, "ImmutableJSON"],
-#     Tuple["ImmutableJSON", ...],
-# ]
-# """A JSON value, where all structures (arrays and objects) are immutable."""
-#
-# ImmutableJSONDict: TypeAlias = ImmutableMapping[str, ImmutableJSON]
-# """An immutable JSON dictionary."""

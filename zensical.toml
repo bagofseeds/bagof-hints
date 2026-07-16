@@ -10,7 +10,6 @@ nav = [ # ofontawesome-solid-home
     {"builtin" = "api/builtin.md"},
     {"collections" = "api/collections.md"},
     {"flexi" = "api/flexi.md"},
-    {"immutable" = "api/immutable.md"},
     {"json" = "api/json.md"},
     {"strings" = "api/strings.md"},
     {"typevars" = [

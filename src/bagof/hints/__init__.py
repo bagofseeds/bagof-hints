@@ -9,8 +9,6 @@ collections
     Protocols that are compatible with [collections.abc][].
 flexi
     Flexible "type-like" for use in converters.
-immutable
-    Immutable collections.
 json
     Types related to JSON (de)serialization.
 strings
@@ -25,7 +23,6 @@ __all__ = [
     "builtin",
     "collections",
     "flexi",
-    "immutable",
     "json",
     "strings",
     "typevars",
@@ -41,7 +38,6 @@ from . import (
     builtin,
     collections,
     flexi,
-    immutable,
     json,
     strings,
     typevars,
@@ -53,8 +49,6 @@ from .collections import *  # noqa: F401, F403
 from .collections import __all__ as __all_collections
 from .flexi import *  # noqa: F401, F403
 from .flexi import __all__ as __all_flexi
-from .immutable import *  # noqa: F401, F403
-from .immutable import __all__ as __all_immutable
 from .json import *  # noqa: F401, F403
 from .json import __all__ as __all_json
 from .strings import *  # noqa: F401, F403
@@ -67,7 +61,6 @@ from .unpackable import __all__ as __all_unpackable
 __all__ += __all_builtin
 __all__ += __all_collections
 __all__ += __all_flexi
-__all__ += __all_immutable
 __all__ += __all_json
 __all__ += __all_strings
 __all__ += __all_typevars

@@ -1,7 +1,6 @@
 """Runtime structural conformance tests for the exported protocols.
 
-The [`collections`][bagof.hints.collections] and
-[`immutable`][bagof.hints.immutable] protocols are decorated with
+The [`collections`][bagof.hints.collections] protocols are decorated with
 ``@runtime_checkable``, so ``isinstance`` performs a structural
 (method-presence) check. These tests pin that behaviour for the concrete
 builtins each protocol is meant to describe.
@@ -17,9 +16,6 @@ from bagof.hints import (
     Collection,
     Container,
     Hashable,
-    ImmutableMapping,
-    ImmutableSequence,
-    ImmutableSet,
     Iterable,
     Iterator,
     Mapping,
@@ -37,7 +33,6 @@ RUNTIME_CHECKABLE = [
     "Container", "Hashable", "Iterable", "Iterator", "Reversible", "Sized",
     "Collection", "Sequence", "MutableSequence", "Set", "MutableSet",
     "Mapping", "MutableMapping", "Awaitable", "Buffer",
-    "ImmutableSequence", "ImmutableSet", "ImmutableMapping",
 ]
 
 
@@ -91,51 +86,4 @@ def test_runtime_conformance(
     protocol: type, value: object, expected: bool
 ) -> None:
     """Concrete builtins conform (or not) to the collections protocols."""
-    assert isinstance(value, protocol) is expected
-
-
-# ---------------------------------------------------------------------------
-# Immutable protocols
-#
-# These protocols describe *specifically immutable* collections (see
-# ``immutable.py``). Structural typing cannot assert the *absence* of a
-# mutating method, so a mutable ``list`` may still satisfy
-# ``ImmutableSequence`` structurally. The cases below encode the *intended*
-# semantics and are marked ``xfail`` where structural typing cannot honour
-# them.
-# ---------------------------------------------------------------------------
-IMMUTABLE_INTENDED = [
-    pytest.param(ImmutableSequence, (1, 2), True, id="tuple-is-immutable-seq"),
-    pytest.param(
-        ImmutableSequence, [1, 2], False, id="list-is-not-immutable-seq",
-        marks=pytest.mark.xfail(
-            reason="structural protocols cannot reject a mutable list",
-            strict=False,
-        ),
-    ),
-    pytest.param(
-        ImmutableSet, frozenset({1}), True, id="frozenset-is-immutable-set",
-    ),
-    pytest.param(
-        ImmutableSet, {1}, False, id="set-is-not-immutable-set",
-        marks=pytest.mark.xfail(
-            reason="structural protocols cannot reject a mutable set",
-            strict=False,
-        ),
-    ),
-    pytest.param(
-        ImmutableMapping, {"a": 1}, False, id="dict-is-not-immutable-mapping",
-        marks=pytest.mark.xfail(
-            reason="structural protocols cannot reject a mutable dict",
-            strict=False,
-        ),
-    ),
-]
-
-
-@pytest.mark.parametrize("protocol,value,expected", IMMUTABLE_INTENDED)
-def test_immutable_intended_semantics(
-    protocol: type, value: object, expected: bool
-) -> None:
-    """Document the *intended* immutability semantics (see the module)."""
     assert isinstance(value, protocol) is expected
