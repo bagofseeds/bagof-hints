@@ -60,8 +60,12 @@ CONFORMANCE = [
     (Collection, [1], True),
     (Collection, 3, False),
     (Sequence, [1, 2], True),
-    # NB: a plain ``tuple`` has no ``__reversed__`` attribute, so it does not
-    # satisfy the (structural) ``Reversible``-derived ``Sequence`` protocol.
+    # ``Sequence`` does not require ``__reversed__``, so builtins that lack it
+    # (tuple, str, range) conform -- matching the members abc.Sequence
+    # registers, even though they only reverse via the len/getitem fallback.
+    (Sequence, (1, 2), True),
+    (Sequence, "ab", True),
+    (Sequence, range(3), True),
     (Sequence, 3, False),
     (MutableSequence, [1], True),
     (MutableSequence, (1,), False),
@@ -73,7 +77,10 @@ CONFORMANCE = [
     (Mapping, [1], False),
     (MutableMapping, {"a": 1}, True),
     (MutableMapping, (1,), False),
+    # ``Reversible`` *does* require ``__reversed__``: a list has it, a plain
+    # tuple does not (it reverses via the len/getitem fallback instead).
     (Reversible, [1, 2], True),
+    (Reversible, (1, 2), False),
 ]
 
 

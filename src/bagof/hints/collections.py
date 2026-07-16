@@ -64,7 +64,15 @@ class Iterator(Iterable[T_co], tx.Protocol[T_co]):
 
 @tx.runtime_checkable
 class Reversible(Iterable[T_co], tx.Protocol[T_co]):
-    """See [`collections.abc.Reversible`][]."""
+    """See [`collections.abc.Reversible`][].
+
+    This is a purely *structural* check for a ``__reversed__`` method.
+    Builtins that are reversible only through the ``__len__``/``__getitem__``
+    fallback used by [`reversed`][] (``tuple``, ``str``, ``bytes``,
+    ``range``, ...) do **not** expose ``__reversed__``, so they are *not*
+    instances of this protocol -- unlike `collections.abc.Reversible`, which
+    reports them as virtual subclasses via registration rather than structure.
+    """
 
     def __reversed__(self) -> Iterator[T_co]: ...
 
@@ -109,11 +117,24 @@ class Collection(
 
 @tx.runtime_checkable
 class Sequence(
-    Reversible[T_co],
     Collection[T_co],
     tx.Protocol[T_co],
 ):
-    """See [`collections.abc.Sequence`][]."""
+    """A read-only sequence, structurally close to
+    [`collections.abc.Sequence`][].
+
+    Unlike the standard library's ABC, this protocol does **not** derive from
+    [`Reversible`][bagof.hints.collections.Reversible] and so does not require
+    a ``__reversed__`` method. This is deliberate: ``tuple``, ``str``,
+    ``bytes`` and ``range`` are reversible only through the
+    ``__len__``/``__getitem__`` fallback used by [`reversed`][] and do not
+    expose ``__reversed__`` themselves. Requiring it would make those builtins
+    fail a structural ``isinstance`` check, even though
+    `collections.abc.Sequence` -- which relies on explicit registration rather
+    than structure -- treats them as sequences. Use
+    [`Reversible`][bagof.hints.collections.Reversible] explicitly when a
+    ``__reversed__`` method is actually required.
+    """
 
     def __getitem__(self, index: int) -> T_co: ...
 
