@@ -1,6 +1,14 @@
+# mypy does not support the ``infer_variance`` argument to ``TypeVar()``
+# in the legacy call form (it is only understood via PEP 695 class
+# syntax), so it emits a spurious ``[misc]`` error for every TypeVar
+# declared here. pyright and the typing_extensions runtime handle it
+# correctly.
+# mypy: disable-error-code="misc"
 __all__ = [
     "T",
     "K",
+    "OBJECT",
+    "TYPE",
     "NONE",
     "STR",
     "BYTES",
@@ -75,64 +83,79 @@ REAL = tx.TypeVar("REAL", infer_variance=True, bound=numbers.Real)
 NUMBER = tx.TypeVar("NUMBER", infer_variance=True, bound=numbers.Number)
 """A inferable TypeVar for numeric values."""
 
-CONTAINER = tx.TypeVar("CONTAINER", infer_variance=True, bound=tx.Container)
+CONTAINER = tx.TypeVar(
+    "CONTAINER", infer_variance=True, bound=tx.Container[tx.Any])
 """A inferable TypeVar for containers."""
 
 HASHABLE = tx.TypeVar("HASHABLE", infer_variance=True, bound=tx.Hashable)
 """A inferable hashable TypeVar."""
 
-ITERABLE = tx.TypeVar("ITERABLE", infer_variance=True, bound=tx.Iterable)
+ITERABLE = tx.TypeVar(
+    "ITERABLE", infer_variance=True, bound=tx.Iterable[tx.Any])
 """A inferable TypeVar for iterables."""
 
-ITERATOR = tx.TypeVar("ITERATOR", infer_variance=True, bound=tx.Iterator)
+ITERATOR = tx.TypeVar(
+    "ITERATOR", infer_variance=True, bound=tx.Iterator[tx.Any])
 """A inferable TypeVar for iterators."""
 
-REVERSIBLE = tx.TypeVar("REVERSIBLE", infer_variance=True, bound=tx.Reversible)
+REVERSIBLE = tx.TypeVar(
+    "REVERSIBLE", infer_variance=True, bound=tx.Reversible[tx.Any])
 """A inferable TypeVar for reversibles."""
 
-GENERATOR = tx.TypeVar("GENERATOR", infer_variance=True, bound=tx.Generator)
+GENERATOR = tx.TypeVar(
+    "GENERATOR",
+    infer_variance=True,
+    bound=tx.Generator[tx.Any, tx.Any, tx.Any],
+)
 """A inferable TypeVar for generators."""
 
 SIZED = tx.TypeVar("SIZED", infer_variance=True, bound=tx.Sized)
 """A inferable TypeVar for sized objects."""
 
-COLLECTION = tx.TypeVar("COLLECTION", infer_variance=True, bound=tx.Collection)
+COLLECTION = tx.TypeVar(
+    "COLLECTION", infer_variance=True, bound=tx.Collection[tx.Any])
 """A inferable TypeVar for collections."""
 
-SEQUENCE = tx.TypeVar("SEQUENCE", infer_variance=True, bound=tx.Sequence)
+SEQUENCE = tx.TypeVar(
+    "SEQUENCE", infer_variance=True, bound=tx.Sequence[tx.Any])
 """A inferable TypeVar for sequences."""
 
 MUTABLE_SEQUENCE = tx.TypeVar(
-    "MUTABLE_SEQUENCE", infer_variance=True, bound=tx.MutableSequence)
+    "MUTABLE_SEQUENCE", infer_variance=True, bound=tx.MutableSequence[tx.Any])
 """A inferable TypeVar for mutable sequences."""
 
-SET = tx.TypeVar("SET", infer_variance=True, bound=tx.Set)
+SET = tx.TypeVar("SET", infer_variance=True, bound=tx.Set[tx.Any])
 """A inferable TypeVar for sets."""
 
 MUTABLE_SET = tx.TypeVar(
-    "MUTABLE_SET", infer_variance=True, bound=tx.MutableSet)
+    "MUTABLE_SET", infer_variance=True, bound=tx.MutableSet[tx.Any])
 """A inferable TypeVar for mutable sets."""
 
-MAPPING = tx.TypeVar("MAPPING", infer_variance=True, bound=tx.Mapping)
+MAPPING = tx.TypeVar(
+    "MAPPING", infer_variance=True, bound=tx.Mapping[tx.Any, tx.Any])
 """A inferable TypeVar for mappings."""
 
 MUTABLE_MAPPING = tx.TypeVar(
-    "MUTABLE_MAPPING", infer_variance=True, bound=tx.MutableMapping)
+    "MUTABLE_MAPPING",
+    infer_variance=True,
+    bound=tx.MutableMapping[tx.Any, tx.Any],
+)
 """A inferable TypeVar for mutable mappings."""
 
-AWAITABLE = tx.TypeVar("AWAITABLE", infer_variance=True, bound=tx.Awaitable)
+AWAITABLE = tx.TypeVar(
+    "AWAITABLE", infer_variance=True, bound=tx.Awaitable[tx.Any])
 """A inferable TypeVar for awaitables."""
 
 BUFFER = tx.TypeVar("BUFFER", infer_variance=True, bound=tx.Buffer)
 """A inferable TypeVar for buffers."""
 
-LIST = tx.TypeVar("LIST", infer_variance=True, bound=tx.List)
+LIST = tx.TypeVar("LIST", infer_variance=True, bound=tx.List[tx.Any])
 """A inferable TypeVar for lists."""
 
-TUPLE = tx.TypeVar("TUPLE", infer_variance=True, bound=tx.Tuple)
+TUPLE = tx.TypeVar("TUPLE", infer_variance=True, bound=tx.Tuple[tx.Any, ...])
 """A inferable TypeVar for tuples."""
 
-DICT = tx.TypeVar("DICT", infer_variance=True, bound=tx.Dict)
+DICT = tx.TypeVar("DICT", infer_variance=True, bound=tx.Dict[tx.Any, tx.Any])
 """A inferable TypeVar for dictionaries."""
 
 if tx.TYPE_CHECKING or np:

@@ -6,13 +6,11 @@ __all__ = [
     "JSONDict",
     "MutableJSON",
     "MutableJSONDict",
-    # "ImmutableJSON",
-    # "ImmutableJSONDict",
 ]
 # Import stdlib so that mkdocstring correctly resolves cross-references
 import json  # noqa: F401
 
-from typing_extensions import Dict, List, Mapping, TypeAlias, Union
+from typing_extensions import Dict, List, TypeAlias, Union
 
 from .builtin import BuiltinSequence
 
@@ -31,7 +29,7 @@ A scalar that is properly handled by [`json.dump`][]:
 JSON: TypeAlias = Union[
     # Not a TypeAlias because of recursion
     JSONScalar,
-    Mapping[str, "JSON"],
+    Dict[str, "JSON"],
     BuiltinSequence["JSON"],
 ]
 """
@@ -40,7 +38,7 @@ A value that is properly handled by [`json.dump`][]:
 Note that this is a recursive type.
 """
 
-JSONDict: TypeAlias = Mapping[str, JSON]
+JSONDict: TypeAlias = Dict[str, JSON]
 """A JSON dictionary."""
 
 MutableJSON: TypeAlias = Union[
@@ -53,15 +51,3 @@ MutableJSON: TypeAlias = Union[
 
 MutableJSONDict: TypeAlias = Dict[str, MutableJSON]
 """A mutable JSON dictionary."""
-
-
-# ImmutableJSON: TypeAlias = Union[
-#     # Not a TypeAlias because of recursion
-#     JSONScalar,
-#     ImmutableMapping[str, "ImmutableJSON"],
-#     Tuple["ImmutableJSON", ...],
-# ]
-# """A JSON value, where all structures (arrays and objects) are immutable."""
-#
-# ImmutableJSONDict: TypeAlias = ImmutableMapping[str, ImmutableJSON]
-# """An immutable JSON dictionary."""
