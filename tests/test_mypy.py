@@ -75,20 +75,21 @@ def test_mypy_valid(tmp_path: Path, line: tx.Iterable[str]) -> None:
     assert result.returncode == 0, result.stdout + result.stderr
 
 
-# Does not fail for now for some reason ...
-if False:
-    @pytest.mark.parametrize("line", INVALID)
-    def test_mypy_invalid(tmp_path: Path, line: tx.Iterable[str]) -> None:
-        """Mypy should reject incompatible values for the exported hints."""
-        path = tmp_path / "invalid_hints.py"
-        hint, value, *imports = line
-        statement = f"x: {hint} = {value}"
-        text = "\n".join([*imports, statement])
-        print(text)
-        path.write_text(text, encoding="utf-8")
+@pytest.mark.parametrize("line", INVALID)
+def test_mypy_invalid(tmp_path: Path, line: tx.Iterable[str]) -> None:
+    """Mypy should reject incompatible values for the exported hints."""
+    path = tmp_path / "invalid_hints.py"
+    hint, value, *imports = line
+    statement = f"x: {hint} = {value}"
+    text = "\n".join([*imports, statement])
+    print(text)
+    path.write_text(text, encoding="utf-8")
 
-        result = run_mypy(path)
-        output = result.stdout + result.stderr
+    result = run_mypy(path)
+    output = result.stdout + result.stderr
 
-        assert result.returncode != 0, output
-        assert output.count(": error:") >= 4, output
+    assert result.returncode != 0, output
+    # Each parametrized case checks a single statement, so mypy reports a
+    # single error. (The previous ``>= 4`` threshold assumed all INVALID
+    # cases were type-checked in one file.)
+    assert output.count(": error:") >= 1, output
