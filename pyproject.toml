@@ -38,6 +38,9 @@ Repository = "https://github.com/bagofseeds/bagof-hints"
 test = [
     "mypy==1.14.1",
     "pytest>=7",
+    # Optional runtime dependency: exercises the numpy-only TypeVars
+    # (``DTYPE`` / ``DTYPELIKE``) so the full matrix is covered by the tests.
+    "numpy",
 ]
 
 [build-system]
@@ -89,6 +92,18 @@ ignore = [
     "UP006",    # Old-style collections hints (List instead of list)
     "UP035",    # Use `typing_extensions` instead of `typing`
 ]
+
+[tool.mypy]
+strict = true
+python_version = "3.8"
+
+[[tool.mypy.overrides]]
+# numpy ships stubs using PEP 695 ``type`` syntax that mypy rejects under
+# ``python_version = 3.8``. We only consume numpy's types structurally, so we
+# skip analysing its stubs.
+module = "numpy.*"
+follow_imports = "skip"
+follow_imports_for_stubs = true
 
 [tool.codespell]
 check-filenames = true

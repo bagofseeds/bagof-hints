@@ -4,7 +4,16 @@ Immutable collections.
 The standard library's hints or abstract base classes that are not marked
 as "Mutable" (such as [`collections.abc.MutableSequence`][]), represent
 objects that may or may not be mutable. The type hints in this module
-represent collections that are _specifically_ immutables.
+represent the *read-only* interface of a collection: they expose no mutating
+methods, so a value typed as one of them cannot be mutated through that type.
+
+!!! note
+
+    Structural typing cannot assert the *absence* of a method, so a concrete
+    mutable object (e.g. a `#!python list`) may still satisfy these protocols
+    structurally. When a hard guarantee is required, annotate with a concrete
+    immutable type instead (e.g. `#!python Tuple`, `#!python frozenset` or
+    [`types.MappingProxyType`][]).
 """
 __all__ = ["ImmutableSequence", "ImmutableSet", "ImmutableMapping"]
 
@@ -15,48 +24,38 @@ import typing_extensions as tx
 
 from ._internal.typevars.co import K as K_co
 from ._internal.typevars.co import T as T_co
-from .collections import Iterable, Mapping, Sequence, Set
+from ._internal.typevars.inv import K as K_inv
+from .collections import Collection, Mapping, Set
 
 
 @tx.runtime_checkable
-class ImmutableSequence(Sequence[T_co], tx.Protocol[T_co]):
-    """An immutable [`collections.abc.Sequence`][]."""
+class ImmutableSequence(Collection[T_co], tx.Protocol[T_co]):
+    """A read-only [`collections.abc.Sequence`][].
 
-    __setitem__ = tx.NotRequired[tx.Callable[[int, T_co], tx.Never]]
-    __delitem__ = tx.NotRequired[tx.Callable[[int], tx.Never]]
-    insert = tx.NotRequired[tx.Callable[[int, T_co], tx.Never]]
-    append = tx.NotRequired[tx.Callable[[T_co], tx.Never]]
-    extend = tx.NotRequired[tx.Callable[[Iterable[T_co]], tx.Never]]
-    reverse = tx.NotRequired[tx.Callable[[], tx.Never]]
-    clear = tx.NotRequired[tx.Callable[[], tx.Never]]
-    remove = tx.NotRequired[tx.Callable[[T_co], tx.Never]]
-    pop = tx.NotRequired[tx.Callable[[int], tx.Never]]
-    __iadd__ = tx.NotRequired[tx.Callable[[Iterable[T_co]], tx.Never]]
+    Unlike [`Sequence`][bagof.hints.collections.Sequence] this does not require
+    ``__reversed__``, so a canonical immutable `#!python Tuple` satisfies it.
+    """
+
+    def __getitem__(self, index: int) -> T_co: ...
+
+    def index(self, value: object, start: int = ..., stop: int = ...) -> int:
+        ...
+
+    def count(self, value: object) -> int: ...
 
 
 @tx.runtime_checkable
 class ImmutableSet(Set[K_co], tx.Protocol[K_co]):
-    """An immutable [`collections.abc.Set`][]."""
+    """A read-only [`collections.abc.Set`][] (e.g. a `#!python frozenset`)."""
 
-    add = tx.NotRequired[tx.Callable[[K_co], tx.Never]]
-    discard = tx.NotRequired[tx.Callable[[K_co], tx.Never]]
-    clear = tx.NotRequired[tx.Callable[[], tx.Never]]
-    pop = tx.NotRequired[tx.Callable[[], tx.Never]]
-    remove = tx.NotRequired[tx.Callable[[K_co], tx.Never]]
-    __iand__ = tx.NotRequired[tx.Callable[[Set[K_co]], tx.Never]]
-    __ior__ = tx.NotRequired[tx.Callable[[Set[K_co]], tx.Never]]
-    __isub__ = tx.NotRequired[tx.Callable[[Set[K_co]], tx.Never]]
-    __ixor__ = tx.NotRequired[tx.Callable[[Set[K_co]], tx.Never]]
+    ...
 
 
 @tx.runtime_checkable
-class ImmutableMapping(Mapping[K_co, T_co], tx.Protocol[K_co, T_co]):
-    """An immutable [`collections.abc.Mapping`][]."""
+class ImmutableMapping(Mapping[K_inv, T_co], tx.Protocol[K_inv, T_co]):
+    """A read-only [`collections.abc.Mapping`][].
 
-    __setitem__ = tx.NotRequired[tx.Callable[[K_co, T_co], tx.Never]]
-    __delitem__ = tx.NotRequired[tx.Callable[[K_co], tx.Never]]
-    pop = tx.NotRequired[tx.Callable[[K_co, T_co], tx.Never]]
-    popitem = tx.NotRequired[tx.Callable[[K_co], tx.Never]]
-    clear = tx.NotRequired[tx.Callable[[], tx.Never]]
-    update = tx.NotRequired[tx.Callable[[Mapping[K_co, T_co]], tx.Never]]
-    setdefault = tx.NotRequired[tx.Callable[[K_co, T_co], tx.Never]]
+    For example, a [`types.MappingProxyType`][].
+    """
+
+    ...

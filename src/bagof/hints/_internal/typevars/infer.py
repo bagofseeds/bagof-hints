@@ -1,3 +1,9 @@
+# mypy does not support the ``infer_variance`` argument to ``TypeVar()``
+# in the legacy call form (it is only understood via PEP 695 class
+# syntax), so it emits a spurious ``[misc]`` error for every TypeVar
+# declared here. pyright and the typing_extensions runtime handle it
+# correctly.
+# mypy: disable-error-code="misc"
 __all__ = ["T", "K"]
 
 import typing_extensions as tx
