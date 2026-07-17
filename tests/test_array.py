@@ -117,14 +117,19 @@ def test_dtype_protocol_matches_anything_with_a_dtype() -> None:
 # ----------------------------------------------------------------------
 
 
-def test_numpy_array_types_are_the_real_thing() -> None:
+def test_numpy_array_types_match_subscriptability() -> None:
     from bagof.hints import numpy as npt
 
-    # On a subscriptable numpy (>=1.22), the hints ARE numpy's own types, so
-    # ``isinstance`` and registry-key identity work naturally.
-    assert npt.ndarray is numpy.ndarray
-    assert npt.dtype is numpy.dtype
-    assert isinstance(numpy.zeros(3), npt.ndarray)
+    if npt._SUBSCRIPTABLE:
+        # numpy >= 1.22 on Python >= 3.9: the hints ARE numpy's own types,
+        # so ``isinstance`` and registry-key identity work naturally.
+        assert npt.ndarray is numpy.ndarray
+        assert npt.dtype is numpy.dtype
+        assert isinstance(numpy.zeros(3), npt.ndarray)
+    else:
+        # Python 3.8 / old numpy: subscriptable generic stubs instead.
+        assert npt.ndarray is not numpy.ndarray
+        assert issubclass(npt.ndarray, tx.Generic)
 
 
 def test_numpy_ndarray_is_subscriptable() -> None:
@@ -172,20 +177,22 @@ def test_numpy_typevars_variance(variance: str, flag: str) -> None:
 
 # ----------------------------------------------------------------------
 # dask submodule (installed, but its Array is not subscriptable, so it
-# exercises the generic-subclass fallback that numpy never reaches)
+# uses the generic stub)
 # ----------------------------------------------------------------------
 
 
-def test_dask_array_is_subscriptable_via_fallback() -> None:
-    dask_array = pytest.importorskip("dask.array")
+def test_dask_array_is_a_subscriptable_stub() -> None:
+    pytest.importorskip("dask.array")
     from bagof.hints import dask as dkt
 
-    # dask.Array is not subscriptable at runtime, so ``dkt.Array`` is a
-    # generic subclass of it -- which IS subscriptable.
-    assert issubclass(dkt.Array, dask_array.Array)
+    # dask.Array carries no ``__class_getitem__``, so ``dkt.Array`` is a
+    # library-free generic stub -- which IS subscriptable.
+    assert issubclass(dkt.Array, tx.Generic)
     assert dkt.NDArray[numpy.float64]
-    # dtype and the protocols are shared with numpy.
-    assert dkt.dtype is numpy.dtype
+    # dtype is shared with the numpy submodule (whichever form it takes).
+    from bagof.hints import numpy as npt
+
+    assert dkt.dtype is npt.dtype
 
 
 def test_dask_array_matches_array_protocol() -> None:
@@ -193,7 +200,6 @@ def test_dask_array_matches_array_protocol() -> None:
     from bagof.hints import ArrayProtocol
 
     x = dask_array.from_array(numpy.zeros(3))
-    # The library-agnostic protocol is the right isinstance target -- it
-    # matches the real dask array, whereas ``dkt.Array`` (a subclass) does
-    # not.
+    # The library-agnostic protocol is the right isinstance target: it
+    # matches the real dask array, whereas the ``dkt.Array`` stub does not.
     assert isinstance(x, ArrayProtocol)

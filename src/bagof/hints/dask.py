@@ -20,6 +20,8 @@ __all__ = [
     "NDArray",
 ]
 
+import sys
+
 import typing_extensions as tx
 
 from ._internal.typevars.inv import DTYPE, SHAPE
@@ -41,25 +43,26 @@ else:
 
 
 # Whether dask's array type can be parametrised at runtime (see the note in
-# ``bagof.hints.numpy`` on why we detect ``__class_getitem__``).
-_SUBSCRIPTABLE = da is not None and hasattr(da.Array, "__class_getitem__")
+# ``bagof.hints.numpy`` on the two gates). dask's ``Array`` has no
+# ``__class_getitem__`` at all today, so this is currently always False and
+# the generic stub is used -- for `isinstance`, use the real
+# ``dask.array.Array`` or the library-free
+# [`ArrayProtocol`][bagof.hints.array.ArrayProtocol].
+_SUBSCRIPTABLE = (
+    da is not None
+    and sys.version_info >= (3, 9)
+    and hasattr(da.Array, "__class_getitem__")
+)
 
 
-if tx.TYPE_CHECKING or _SUBSCRIPTABLE:
+if tx.TYPE_CHECKING or _SUBSCRIPTABLE:  # pragma: no cover
     Array = da.Array
     """See [`dask.array.Array`][]."""
 
-elif da is not None:
-
-    class Array(  # type: ignore[no-redef,misc]
-        da.Array, tx.Generic[SHAPE, DTYPE]
-    ):
-        """See [`dask.array.Array`][]."""
-
-else:  # pragma: no cover
+else:
 
     class Array(tx.Generic[SHAPE, DTYPE]):  # type: ignore[no-redef]
-        """A stub for [`dask.array.Array`][], when dask is not installed."""
+        """A generic stub for [`dask.array.Array`][]."""
 
 
 NDArray: tx.TypeAlias = Array[tx.Tuple[int, ...], dtype[DTYPE]]

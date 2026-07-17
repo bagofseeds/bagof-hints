@@ -20,6 +20,8 @@ __all__ = [
     "NDArray",
 ]
 
+import sys
+
 import typing_extensions as tx
 
 from ._internal.typevars.inv import DTYPE, SHAPE
@@ -41,25 +43,24 @@ else:
 
 
 # Whether cupy's array type can be parametrised at runtime (see the note in
-# ``bagof.hints.numpy`` on why we detect ``__class_getitem__``).
-_SUBSCRIPTABLE = cp is not None and hasattr(cp.ndarray, "__class_getitem__")
+# ``bagof.hints.numpy`` on the two gates; cupy mirrors numpy's behaviour).
+_SUBSCRIPTABLE = (
+    cp is not None
+    and sys.version_info >= (3, 9)
+    and hasattr(cp.ndarray, "__class_getitem__")
+)
 
 
-if tx.TYPE_CHECKING or _SUBSCRIPTABLE:
+if tx.TYPE_CHECKING or _SUBSCRIPTABLE:  # pragma: no cover
+    # cupy is not installable in CI (it needs a CUDA toolchain), so the
+    # library-present branch is only ever type-checked, never run.
     ndarray = cp.ndarray
     """See [`cupy.ndarray`][]."""
-
-elif cp is not None:  # pragma: no cover
-
-    class ndarray(  # type: ignore[no-redef,misc]
-        cp.ndarray, tx.Generic[SHAPE, DTYPE]
-    ):
-        """See [`cupy.ndarray`][]."""
 
 else:
 
     class ndarray(tx.Generic[SHAPE, DTYPE]):  # type: ignore[no-redef]
-        """A stub for [`cupy.ndarray`][], when cupy is not installed."""
+        """A generic stub for [`cupy.ndarray`][]."""
 
 
 NDArray: tx.TypeAlias = ndarray[tx.Tuple[int, ...], dtype[DTYPE]]

@@ -24,6 +24,8 @@ __all__ = [
     "typevars",
 ]
 
+import sys
+
 import typing_extensions as tx
 
 from .._internal.typevars.inv import DTYPE, SHAPE
@@ -39,13 +41,21 @@ from ._compat import np, npt
 
 # Whether numpy's array types can be parametrised at runtime.
 #
-# `numpy.ndarray[...]` and `numpy.dtype[...]` only became subscriptable in
-# numpy 1.22, when they gained ``__class_getitem__``. We feature-detect on
-# that -- rather than compare versions, and rather than test for
-# `numpy.typing`, which exists from 1.20 and so would wrongly claim support
-# on 1.20 and 1.21.
+# Two independent gates must both pass:
+#   * numpy >= 1.22, which is when ``ndarray`` / ``dtype`` gained
+#     ``__class_getitem__`` (``numpy.typing`` alone, present from 1.20,
+#     would wrongly claim support on 1.20/1.21); and
+#   * Python >= 3.9 -- numpy refuses the subscription on 3.8 with
+#     "Type subscription requires python >= 3.9", *even though*
+#     ``__class_getitem__`` exists there, so the attribute check alone is a
+#     false positive on 3.8.
+# When either gate fails we fall back to library-free generic stubs, which
+# subscript fine everywhere (subclassing numpy's types is not an option:
+# ``dtype`` cannot be subclassed, and a subclassed ``ndarray`` inherits the
+# same version gate).
 _SUBSCRIPTABLE = (
     np is not None
+    and sys.version_info >= (3, 9)
     and hasattr(np.ndarray, "__class_getitem__")
     and hasattr(np.dtype, "__class_getitem__")
 )
@@ -58,31 +68,20 @@ if tx.TYPE_CHECKING or _SUBSCRIPTABLE:
     ndarray = np.ndarray
     """See [`numpy.ndarray`][]."""
 
-elif np is not None:  # pragma: no cover
-    # numpy < 1.22: the array types are not subscriptable, so we subclass
-    # them to add the generic parameters. Note this means `ndarray` is *not*
-    # `numpy.ndarray` on these versions, so `isinstance` against it is
-    # narrower than you would expect -- check against `numpy.ndarray`.
-    #
-    # We only ever reach this branch on old numpy, which matters: numpy 2.x
-    # forbids subclassing `dtype` ("Preliminary-API: Cannot subclass
-    # DType."), so this code must not run there.
-
-    class dtype(np.dtype, tx.Generic[DTYPE]):  # type: ignore[no-redef,misc]
-        """See [`numpy.dtype`][]."""
-
-    class ndarray(  # type: ignore[no-redef,misc]
-        np.ndarray, tx.Generic[SHAPE, DTYPE]
-    ):
-        """See [`numpy.ndarray`][]."""
-
 else:  # pragma: no cover
+    # numpy absent, or its types are not subscriptable (numpy < 1.22, or
+    # Python 3.8). ``ndarray`` / ``dtype`` are then generic *stubs* -- not
+    # numpy's own types -- so annotations still evaluate, but ``isinstance``
+    # against them is meaningless (use ``numpy.ndarray`` or the library-free
+    # [`ArrayProtocol`][bagof.hints.array.ArrayProtocol] instead). Not
+    # covered on the 3.x coverage run, where the branch above is taken; the
+    # 3.8 CI job exercises it instead.
 
     class dtype(tx.Generic[DTYPE]):  # type: ignore[no-redef]
-        """A stub for [`numpy.dtype`][], when numpy is not installed."""
+        """A generic stub for [`numpy.dtype`][]."""
 
     class ndarray(tx.Generic[SHAPE, DTYPE]):  # type: ignore[no-redef]
-        """A stub for [`numpy.ndarray`][], when numpy is not installed."""
+        """A generic stub for [`numpy.ndarray`][]."""
 
 
 NDArray: tx.TypeAlias = ndarray[tx.Tuple[int, ...], dtype[DTYPE]]
