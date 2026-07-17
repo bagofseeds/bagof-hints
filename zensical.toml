@@ -7,10 +7,23 @@ nav = [ # ofontawesome-solid-home
   {"Bag of Hints" = "index.md"},
   {"API" = [
     "api/index.md",
+    {"array" = "api/array.md"},
     {"builtin" = "api/builtin.md"},
     {"collections" = "api/collections.md"},
+    {"cupy" = "api/cupy.md"},
+    {"dask" = "api/dask.md"},
     {"flexi" = "api/flexi.md"},
     {"json" = "api/json.md"},
+    {"numpy" = [
+      "api/numpy/index.md",
+      {"typevars" = [
+        "api/numpy/typevars/index.md",
+        {"co" = "api/numpy/typevars/co.md"},
+        {"contra" = "api/numpy/typevars/contra.md"},
+        {"inv" = "api/numpy/typevars/inv.md"},
+        {"infer" = "api/numpy/typevars/infer.md"},
+      ]},
+    ]},
     {"strings" = "api/strings.md"},
     {"typevars" = [
       "api/typevars/index.md",
