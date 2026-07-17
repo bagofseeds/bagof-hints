@@ -89,8 +89,11 @@ ignore = [
     "ANN002",   # Do not type *args
     "ANN003",   # Do not type *kwargs
     "ANN401",   # Allow typing with Any
-    "UP006",    # Old-style collections hints (List instead of list)
-    "UP035",    # Use `typing_extensions` instead of `typing`
+    # pyupgrade rules whose fixes break Python 3.8 (the supported floor)
+    "UP006",    # list[...] annotations need 3.9 at runtime
+    "UP007",    # X | Y unions need 3.10
+    "UP035",    # deprecated typing import (typing_extensions is intentional)
+    "UP045",    # X | None optionals need 3.10
 ]
 
 [tool.mypy]
