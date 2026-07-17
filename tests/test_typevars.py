@@ -105,19 +105,12 @@ def test_typevar_variance(
     assert _variance(getattr(mod, name)) == variance
 
 
-@pytest.mark.parametrize("key", list(MODULES))
-def test_numpy_typevars_track_availability(key: str) -> None:
-    """``DTYPE`` / ``DTYPELIKE`` are exported iff numpy is importable."""
-    mod, _ = MODULES[key]
-    try:
-        import numpy  # noqa: F401
-
-        available = True
-    except ImportError:  # pragma: no cover - depends on the environment
-        available = False
-
-    assert ("DTYPE" in mod.__all__) is available
-    assert ("DTYPELIKE" in mod.__all__) is available
-    if available:
-        assert isinstance(mod.DTYPE, tx.TypeVar)
-        assert isinstance(mod.DTYPELIKE, tx.TypeVar)
+def test_eager_typevars_are_numpy_free() -> None:
+    """
+    The top-level ``typevars`` modules no longer carry the numpy-bound
+    ``DTYPE`` / ``DTYPELIKE`` -- those moved to ``bagof.hints.numpy.typevars``
+    so that importing ``bagof.hints`` never imports numpy.
+    """
+    for mod, _ in MODULES.values():
+        assert "DTYPE" not in mod.__all__
+        assert "DTYPELIKE" not in mod.__all__

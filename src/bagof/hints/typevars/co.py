@@ -38,7 +38,7 @@ import numbers
 
 import typing_extensions as tx
 
-from .._internal.compat import NoneType, np, npt
+from .._internal.compat import NoneType
 from .._internal.typevars.co import K, T
 
 OBJECT = tx.TypeVar("OBJECT", covariant=True, bound=object)
@@ -140,15 +140,3 @@ TUPLE = tx.TypeVar("TUPLE", covariant=True, bound=tx.Tuple[tx.Any, ...])
 
 DICT = tx.TypeVar("DICT", covariant=True, bound=tx.Dict[tx.Any, tx.Any])
 """A covariant TypeVar for dictionaries."""
-
-if tx.TYPE_CHECKING or np:
-    DTYPE = tx.TypeVar("DTYPE", covariant=True, bound=np.dtype)
-    """A covariant TypeVar for numpy dtypes."""
-
-    __all__.append("DTYPE")
-
-if tx.TYPE_CHECKING or npt:
-    DTYPELIKE = tx.TypeVar("DTYPELIKE", covariant=True, bound=npt.DTypeLike)
-    """A covariant TypeVar for things that can be converted to numpy dtypes."""
-
-    __all__.append("DTYPELIKE")

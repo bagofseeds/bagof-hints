@@ -38,9 +38,12 @@ Repository = "https://github.com/bagofseeds/bagof-hints"
 test = [
     "mypy==1.14.1",
     "pytest>=7",
-    # Optional runtime dependency: exercises the numpy-only TypeVars
-    # (``DTYPE`` / ``DTYPELIKE``) so the full matrix is covered by the tests.
+    # Optional runtime dependency: exercises the numpy array hints and the
+    # numpy-only TypeVars (``DTYPE`` / ``DTYPELIKE``). cupy is intentionally
+    # not listed -- it is not pip-installable without a CUDA toolchain -- so
+    # its hints are only exercised through the library-absent stub branch.
     "numpy",
+    "dask[array]",
 ]
 
 [build-system]
@@ -78,6 +81,16 @@ file = "src/bagof/hints/_version.py"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+
+[tool.coverage.run]
+source = ["bagof.hints"]
+
+[tool.coverage.report]
+exclude_also = [
+    # Type-checking-only blocks never run at runtime.
+    "if tx.TYPE_CHECKING:",
+    "if tx.TYPE_CHECKING or",
+]
 
 [tool.ruff]
 line-length = 79
