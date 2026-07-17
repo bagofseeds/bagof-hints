@@ -126,8 +126,9 @@ def test_numpy_array_types_match_subscriptability() -> None:
         assert npt.ndarray is numpy.ndarray
         assert npt.dtype is numpy.dtype
         assert isinstance(numpy.zeros(3), npt.ndarray)
-    else:
-        # Python 3.8 / old numpy: subscriptable generic stubs instead.
+    else:  # pragma: no cover
+        # Python 3.8 / old numpy: subscriptable generic stubs instead. Not
+        # reached on the 3.x coverage run; exercised by the 3.8 CI job.
         assert npt.ndarray is not numpy.ndarray
         assert issubclass(npt.ndarray, tx.Generic)
 
