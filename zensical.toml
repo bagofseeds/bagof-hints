@@ -118,7 +118,10 @@ repo = "fontawesome/brands/github"
 [project.plugins.mkdocstrings.handlers.python]
 inventories = [
   "https://docs.python.org/3/objects.inv",
-  "https://typing-extensions.readthedocs.io/en/latest/objects.inv"
+  "https://typing-extensions.readthedocs.io/en/latest/objects.inv",
+  "https://numpy.org/doc/stable/objects.inv",
+  "https://docs.cupy.dev/en/stable/objects.inv",
+  "https://docs.dask.org/en/stable/objects.inv",
 ]
 paths = ["src"]
 
