@@ -35,4 +35,16 @@ BuiltinNumber: TypeAlias = Union[BuiltinReal, complex]
 """Any builtin number: `#!python (int | float | complex)`."""
 
 BuiltinScalar: TypeAlias = Union[BuiltinNumber, str]
-"""Any builtin "scalar": `#!python (int | float | complex | str)`."""
+"""
+Any builtin "scalar": `#!python (int | float | complex | str)`.
+
+!!! example
+    The alias flattens to its member types:
+
+    ```python
+    >>> from typing import get_args
+    >>> from bagof.hints.builtin import BuiltinScalar
+    >>> get_args(BuiltinScalar)
+    (<class 'int'>, <class 'float'>, <class 'complex'>, <class 'str'>)
+    ```
+"""
