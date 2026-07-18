@@ -22,6 +22,12 @@ import numbers  # noqa: F401
 
 import typing_extensions as tx
 
+if tx.TYPE_CHECKING:
+    # Import numpy so mkdocstrings resolves the `numpy.*` cross-references in
+    # the docstrings below. numpy is never imported at runtime -- this module
+    # stays usable without it.
+    import numpy  # noqa: F401
+
 from ._internal.typevars.inv import DTYPE
 
 
