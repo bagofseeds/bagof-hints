@@ -28,6 +28,13 @@ import sys
 
 import typing_extensions as tx
 
+if tx.TYPE_CHECKING:
+    # Import numpy so mkdocstrings resolves the `numpy.*` / `numpy.typing.*`
+    # cross-references in the docstrings below. numpy stays optional at
+    # runtime (imported lazily via `._compat`).
+    import numpy  # noqa: F401
+    import numpy.typing  # noqa: F401
+
 from .._internal.typevars.inv import DTYPE, SHAPE
 from ..array import ArrayLike as _ArrayLike
 from ..array import (  # noqa: F401

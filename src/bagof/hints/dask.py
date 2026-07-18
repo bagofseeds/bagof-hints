@@ -33,6 +33,9 @@ from .array import (  # noqa: F401
 from .numpy import DTypeLike, dtype  # noqa: F401
 
 if tx.TYPE_CHECKING:
+    # Import the bare module so mkdocstrings resolves the `dask.array.*`
+    # cross-references in the docstrings below.
+    import dask.array  # noqa: F401
     import dask.array as da
 
 else:

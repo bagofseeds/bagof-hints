@@ -33,6 +33,9 @@ from .array import (  # noqa: F401
 from .numpy import DTypeLike, dtype  # noqa: F401
 
 if tx.TYPE_CHECKING:
+    # Import the bare module so mkdocstrings resolves the `cupy.*`
+    # cross-references in the docstrings below.
+    import cupy  # noqa: F401
     import cupy as cp
 
 else:
