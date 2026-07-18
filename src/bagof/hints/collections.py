@@ -123,17 +123,19 @@ class Sequence(
     """A read-only sequence, structurally close to
     [`collections.abc.Sequence`][].
 
-    Unlike the standard library's ABC, this protocol does **not** derive from
-    [`Reversible`][bagof.hints.collections.Reversible] and so does not require
-    a ``__reversed__`` method. This is deliberate: ``tuple``, ``str``,
-    ``bytes`` and ``range`` are reversible only through the
-    ``__len__``/``__getitem__`` fallback used by [`reversed`][] and do not
-    expose ``__reversed__`` themselves. Requiring it would make those builtins
-    fail a structural ``isinstance`` check, even though
-    `collections.abc.Sequence` -- which relies on explicit registration rather
-    than structure -- treats them as sequences. Use
-    [`Reversible`][bagof.hints.collections.Reversible] explicitly when a
-    ``__reversed__`` method is actually required.
+    !!! note
+        Unlike the standard library's ABC, this protocol does **not**
+        derive from [`Reversible`][bagof.hints.collections.Reversible]
+        and so does not require a ``__reversed__`` method. This is
+        deliberate: ``tuple``, ``str``, ``bytes`` and ``range`` are
+        reversible only through the ``__len__``/``__getitem__`` fallback
+        used by [`reversed`][] and do not expose ``__reversed__``
+        themselves. Requiring it would make those builtins fail a
+        structural ``isinstance`` check, even though
+        `collections.abc.Sequence` -- which relies on explicit
+        registration rather than structure -- treats them as sequences.
+        Use [`Reversible`][bagof.hints.collections.Reversible]
+        explicitly when a ``__reversed__`` method is actually required.
     """
 
     def __getitem__(self, index: int) -> T_co: ...
