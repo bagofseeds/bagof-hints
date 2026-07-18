@@ -23,8 +23,9 @@ BuiltinIntegral: TypeAlias = int
 """
 The builtin integral type: `#!python int`.
 
-Note that `#!python bool` is a subtype of `#!python int` and is therefore
-covered here.
+!!! note
+    `#!python bool` is a subtype of `#!python int` and is therefore
+    covered here.
 """
 
 BuiltinReal: TypeAlias = Union[BuiltinIntegral, float]

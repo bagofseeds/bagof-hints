@@ -48,11 +48,12 @@ class ArrayNamespace(tx.Protocol):
     library that owns the object, so that library-agnostic code can call
     `xp.mean(x)` without knowing which library `x` came from.
 
-    Prefer this over [`ArrayProtocol`][] when the goal is to *stay* in the
-    originating library (and off the host, for GPU arrays), since
-    `__array__` forces a conversion to numpy.
-
     See <https://data-apis.org/array-api/latest/>.
+
+    !!! tip
+        Prefer this over [`ArrayProtocol`][] when the goal is to *stay* in
+        the originating library (and off the host, for GPU arrays), since
+        `__array__` forces a conversion to numpy.
     """
 
     def __array_namespace__(self, *args, **kwargs) -> tx.Any: ...
@@ -75,16 +76,18 @@ ArrayLike: tx.TypeAlias = tx.Union[
 """
 Anything that can reasonably be turned into an array.
 
-This is the library-agnostic fallback. When numpy is installed,
-[`bagof.hints.numpy.ArrayLike`][] is more precise -- it additionally covers
-buffers, nested sequences, and the `str`/`bytes` cases.
+!!! note
+    This is the library-agnostic fallback. When numpy is installed,
+    [`bagof.hints.numpy.ArrayLike`][] is more precise -- it additionally
+    covers buffers, nested sequences, and the `str`/`bytes` cases.
 """
 
 DTypeLike: tx.TypeAlias = tx.Union[type, str, "DTypeProtocol[tx.Any]"]
 """
 Anything that can reasonably be turned into a data type.
 
-This is the library-agnostic fallback. When numpy is installed,
-[`bagof.hints.numpy.DTypeLike`][] is more precise -- it additionally covers
-structured-dtype specifications such as `[("a", int)]`.
+!!! note
+    This is the library-agnostic fallback. When numpy is installed,
+    [`bagof.hints.numpy.DTypeLike`][] is more precise -- it additionally
+    covers structured-dtype specifications such as `[("a", int)]`.
 """
