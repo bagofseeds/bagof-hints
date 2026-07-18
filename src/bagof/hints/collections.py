@@ -72,6 +72,17 @@ class Reversible(Iterable[T_co], tx.Protocol[T_co]):
     ``range``, ...) do **not** expose ``__reversed__``, so they are *not*
     instances of this protocol -- unlike `collections.abc.Reversible`, which
     reports them as virtual subclasses via registration rather than structure.
+
+    !!! example
+        ``list`` defines ``__reversed__``; ``tuple`` does not:
+
+        ```python
+        >>> from bagof.hints.collections import Reversible
+        >>> isinstance([1, 2, 3], Reversible)
+        True
+        >>> isinstance((1, 2, 3), Reversible)
+        False
+        ```
     """
 
     def __reversed__(self) -> Iterator[T_co]: ...

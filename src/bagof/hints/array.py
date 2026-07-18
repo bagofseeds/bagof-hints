@@ -33,6 +33,16 @@ class ArrayProtocol(tx.Protocol):
     This is the oldest and most widely implemented array hook: numpy, cupy,
     dask, torch and pandas objects all provide it, so a single structural
     check covers them all. See [`numpy.ndarray.__array__`][].
+
+    !!! example
+        ```python
+        >>> import numpy as np
+        >>> from bagof.hints.array import ArrayProtocol
+        >>> isinstance(np.array([1, 2, 3]), ArrayProtocol)
+        True
+        >>> isinstance([1, 2, 3], ArrayProtocol)
+        False
+        ```
     """
 
     def __array__(self, *args, **kwargs) -> tx.Any: ...
