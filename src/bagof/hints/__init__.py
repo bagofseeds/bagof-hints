@@ -4,35 +4,42 @@ Reusable typing hints for Python projects.
 Modules
 -------
 array
-    Library-agnostic protocols for array-like objects.
+    :material-asterisk: Library-agnostic protocols for array-like objects.
 builtin
-    Builtin types (such as builtin subsets of [collections.abc][]).
+    :material-asterisk: Builtin types (such as builtin subsets of
+    [`collections.abc`][_abc]).
 collections
-    Protocols that are compatible with [collections.abc][].
+    :material-asterisk: Protocols that are compatible with
+    [`collections.abc`][_abc].
 flexi
-    Flexible "type-like" for use in converters.
+    :material-asterisk: Flexible "type-like" for use in converters.
 json
-    Types related to JSON (de)serialization.
+    :material-asterisk: Types related to JSON (de)serialization.
 strings
-    String-like objects.
+    :material-asterisk: String-like objects.
 typevars
-    Reusable TypeVars.
+    :material-asterisk: Reusable TypeVars.
 unpackable
-    Objects unpackable into keyword arguments.
-
-Lazy modules
-------------
-These are **not** imported by default, and importing them (or accessing
-them as `bagof.hints.<name>`) imports the corresponding array library.
-They stay importable when that library is absent.
-
+    :material-asterisk: Objects unpackable into keyword arguments.
 numpy
-    Hints for [numpy][] arrays and data types.
+    :material-sleep: Hints for [`numpy`][_np] arrays and data types.
 cupy
-    Hints for [cupy][] arrays.
+    :material-sleep: Hints for [`cupy`][_cp] arrays.
 dask
-    Hints for [dask.array][] arrays.
+    :material-sleep: Hints for [`dask.array`][_da] arrays.
+
+!!! tip ":material-asterisk: Unpacked modules"
+    Unpacked modules have all their symbols imported into the root module.
+    For example, [`JSON`][bagof.hints.json.JSON] can be accessed via
+    [`bagof.hints.json.JSON`][] **or** [`bagof.hints.JSON`][].
+
+!!! tip ":material-sleep: Lazy modules"
+    Lazy modules ([`numpy`][.numpy], [`cupy`][.cupy], [`dask`][.dask])
+    are **not** imported by default, and importing them (or accessing
+    them as `bagof.hints.<name>`) imports the corresponding array library.
+    They stay importable when that library is absent.
 """
+
 __all__ = [
     "__version__",
     "array",
@@ -55,6 +62,16 @@ try:
     from ._version import __version__
 except ImportError:  # pragma: no cover
     __version__ = "0+unknown"
+
+# Import libs so that mkdocstring correctly resolves cross-references
+from typing_extensions import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    import collections.abc as _abc  # noqa: F401
+
+    import cupy as _cp  # noqa: F401
+    import dask.array as _da  # noqa: F401
+    import numpy as _np  # noqa: F401
 
 from . import (
     array,
