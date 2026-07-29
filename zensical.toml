@@ -3,8 +3,8 @@
 extra_css = ["stylesheets/extra.css"]
 
 nav = [ # ofontawesome-solid-home
-  {"All the Bags" = "https://bagofseeds.github.io/bagof/"},
-  {"Bag of Hints" = "index.md"},
+  {"Bag of" = "https://bagofseeds.github.io/bagof/"},
+  {"Hints" = "index.md"},
   {"API" = [
     "api/index.md",
     {"array" = "api/array.md"},
