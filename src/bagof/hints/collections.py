@@ -1,4 +1,4 @@
-"""Protocols that are compatible with [`collections.abc`][]"""
+"""Protocols that are compatible with [`collections.abc`][]."""
 __all__ = [
     "Container",
     "Hashable",
@@ -22,10 +22,12 @@ import collections.abc  # noqa: F401
 
 import typing_extensions as tx
 
-# Covariant TypeVars are used for read-only ("producer") positions, invariant
-# ones for read/write ("consumer") positions. This mirrors the variance rules
-# used by the standard library (e.g. ``Sequence`` is covariant while
-# ``MutableSequence`` is invariant, and a ``Mapping``'s key type is invariant).
+# Covariant TypeVars are used where the parameter only ever appears in
+# read-only ("producer") positions, invariant ones where it appears in both
+# read and write positions. This mirrors the variance rules used by the
+# standard library (e.g. ``Sequence`` is covariant in its element type while
+# ``MutableSequence`` is invariant, and a ``Mapping``'s key type is invariant
+# because it is both accepted by ``__getitem__`` and returned by ``keys``).
 from ._internal.typevars.co import K as K_co
 from ._internal.typevars.co import T as T_co
 from ._internal.typevars.inv import K as K_inv
@@ -234,7 +236,8 @@ class Mapping(Collection[K_inv], tx.Protocol[K_inv, T_co]):
     """See [`collections.abc.Mapping`][].
 
     The key type is invariant and the value type is covariant, matching the
-    standard library's ``Mapping``.
+    standard library's ``Mapping``: keys are both accepted (``__getitem__``)
+    and produced (``keys``), whereas values are only ever produced.
     """
 
     def __getitem__(self, key: K_inv) -> T_co: ...

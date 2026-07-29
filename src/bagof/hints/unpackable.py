@@ -8,7 +8,13 @@ from ._internal.typevars.co import T as T_co
 
 class Unpackable(tx.Protocol[T_co]):
     """
-    A protocol for objects than can be unpacked using the `**` syntax.
+    A protocol for objects that can be unpacked using the `**` syntax.
+
+    Unpacking a mapping-like object into keyword arguments only requires
+    `keys()` and `__getitem__`, so this protocol is deliberately narrower
+    than [`Mapping`][bagof.hints.collections.Mapping]. The parameter is the
+    *value* type; keys are always strings, since they become keyword
+    argument names.
     """
 
     def keys(self) -> tx.Iterable[str]: ...

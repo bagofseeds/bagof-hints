@@ -17,7 +17,7 @@ from typing_extensions import List, Tuple, TypeAlias, Union
 from ._internal.typevars.co import T as T_co
 
 BuiltinSequence: TypeAlias = Union[Tuple[T_co, ...], List[T_co]]
-"""Tuple or List, where all elements have the same type."""
+"""A tuple or list whose elements all share the same type."""
 
 BuiltinIntegral: TypeAlias = int
 """
@@ -42,7 +42,7 @@ Any builtin "scalar": `#!python (int | float | complex | str)`.
     The alias flattens to its member types:
 
     ```python
-    >>> from typing import get_args
+    >>> from typing_extensions import get_args
     >>> from bagof.hints.builtin import BuiltinScalar
     >>> get_args(BuiltinScalar)
     (<class 'int'>, <class 'float'>, <class 'complex'>, <class 'str'>)

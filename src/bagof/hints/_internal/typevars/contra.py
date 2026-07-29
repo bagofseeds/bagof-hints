@@ -6,4 +6,4 @@ T = tx.TypeVar("T", contravariant=True, default=tx.Any)
 """A contravariant TypeVar (with a compact name)."""
 
 K = tx.TypeVar("K", contravariant=True, bound=tx.Hashable)
-"""A contravariant hashable TypeVar (with a compact name)."""
+"""A contravariant TypeVar for hashable objects (with a compact name)."""

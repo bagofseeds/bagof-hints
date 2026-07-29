@@ -23,7 +23,7 @@ A number that is properly handled by [`json.dump`][]:
 JSONScalar: TypeAlias = Union[int, float, bool, str, None]
 """
 A scalar that is properly handled by [`json.dump`][]:
-`#!python (int | float | str | None)`.
+`#!python (int | float | bool | str | None)`.
 """
 
 JSON: TypeAlias = Union[

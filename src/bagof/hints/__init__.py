@@ -1,6 +1,17 @@
 """
 Reusable typing hints for Python projects.
 
+!!! tip ":material-asterisk: Unpacked modules"
+    Unpacked modules have all their symbols imported into the root module.
+    For example, [`JSON`][bagof.hints.json.JSON] can be accessed via
+    [`bagof.hints.json.JSON`][] **or** [`bagof.hints.JSON`][].
+
+!!! tip ":material-sleep: Lazy modules"
+    Lazy modules ([`numpy`][.numpy], [`cupy`][.cupy], [`dask`][.dask])
+    are **not** imported by default, and importing them (or accessing
+    them as `bagof.hints.<name>`) imports the corresponding array library.
+    They stay importable when that library is absent.
+
 Modules
 -------
 array
@@ -12,7 +23,7 @@ collections
     :material-asterisk: Protocols that are compatible with
     [`collections.abc`][_abc].
 flexi
-    :material-asterisk: Flexible "type-like" for use in converters.
+    :material-asterisk: Flexible "type-like" aliases for use in converters.
 json
     :material-asterisk: Types related to JSON (de)serialization.
 strings
@@ -27,17 +38,6 @@ cupy
     :material-sleep: Hints for [`cupy`][_cp] arrays.
 dask
     :material-sleep: Hints for [`dask.array`][_da] arrays.
-
-!!! tip ":material-asterisk: Unpacked modules"
-    Unpacked modules have all their symbols imported into the root module.
-    For example, [`JSON`][bagof.hints.json.JSON] can be accessed via
-    [`bagof.hints.json.JSON`][] **or** [`bagof.hints.JSON`][].
-
-!!! tip ":material-sleep: Lazy modules"
-    Lazy modules ([`numpy`][.numpy], [`cupy`][.cupy], [`dask`][.dask])
-    are **not** imported by default, and importing them (or accessing
-    them as `bagof.hints.<name>`) imports the corresponding array library.
-    They stay importable when that library is absent.
 """
 
 __all__ = [

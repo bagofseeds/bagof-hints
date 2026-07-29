@@ -6,4 +6,4 @@ T = tx.TypeVar("T", covariant=True, default=tx.Any)
 """A covariant TypeVar (with a compact name)."""
 
 K = tx.TypeVar("K", covariant=True, bound=tx.Hashable)
-"""A covariant hashable TypeVar (with a compact name)."""
+"""A covariant TypeVar for hashable objects (with a compact name)."""

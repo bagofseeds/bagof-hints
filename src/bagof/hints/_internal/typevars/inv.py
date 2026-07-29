@@ -6,7 +6,7 @@ T = tx.TypeVar("T", default=tx.Any)
 """An invariant TypeVar (with a compact name)."""
 
 K = tx.TypeVar("K", bound=tx.Hashable)
-"""An invariant hashable TypeVar (with a compact name)."""
+"""An invariant TypeVar for hashable objects (with a compact name)."""
 
 SHAPE = tx.TypeVar("SHAPE", bound=tx.Tuple[tx.Any, ...])
 """An invariant TypeVar for array shapes (with a compact name)."""
