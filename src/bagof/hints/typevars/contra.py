@@ -1,3 +1,18 @@
+"""
+Contravariant TypeVars.
+
+A contravariant parameter *reverses* the subtype relation of its
+argument: since `bool` is a subtype of `int`, `Consumer[int]` is a
+subtype of `Consumer[bool]` and is usable wherever the latter is
+expected. That is only sound when the parameter appears in input
+("consumer") positions alone -- parameter types, write-only attributes.
+A generic class that also hands the parameter back out must use an
+invariant TypeVar instead.
+
+Every TypeVar here carries an upper *bound* (not a set of value
+constraints), so it can be solved for any subtype of that bound, and
+never for an unrelated type.
+"""
 __all__ = [
     "T",
     "K",
@@ -82,7 +97,7 @@ CONTAINER = tx.TypeVar(
 """A contravariant TypeVar for containers."""
 
 HASHABLE = tx.TypeVar("HASHABLE", contravariant=True, bound=tx.Hashable)
-"""A contravariant hashable TypeVar."""
+"""A contravariant TypeVar for hashable objects."""
 
 ITERABLE = tx.TypeVar(
     "ITERABLE", contravariant=True, bound=tx.Iterable[tx.Any])

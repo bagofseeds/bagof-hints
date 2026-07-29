@@ -17,7 +17,7 @@ if tx.TYPE_CHECKING or npt is not None:
         "DTYPELIKE", contravariant=True, bound=npt.DTypeLike
     )
     """
-    A contravariant TypeVar for things that can be converted to numpy dtypes.
+    A contravariant TypeVar for objects convertible to a numpy dtype.
     """
 
     __all__.append("DTYPELIKE")

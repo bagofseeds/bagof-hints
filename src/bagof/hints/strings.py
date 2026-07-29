@@ -14,4 +14,4 @@ StringLike: TypeAlias = Union[str, BytesLike]
 """Strings or bytes: `#!python (str | bytes | bytearray | memoryview)`."""
 
 PathLike: TypeAlias = Union[str, "os.PathLike[Any]"]
-"""Strings or paths: `#!python (str | PathLike)`."""
+"""Strings or paths: `#!python (str | os.PathLike[Any])`."""

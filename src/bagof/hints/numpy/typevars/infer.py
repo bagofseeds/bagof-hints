@@ -17,7 +17,7 @@ if tx.TYPE_CHECKING or npt is not None:
         "DTYPELIKE", infer_variance=True, bound=npt.DTypeLike
     )
     """
-    An inferred-variance TypeVar for things convertible to numpy dtypes.
+    An inferred-variance TypeVar for objects convertible to a numpy dtype.
     """
 
     __all__.append("DTYPELIKE")

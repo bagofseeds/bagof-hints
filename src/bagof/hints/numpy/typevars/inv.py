@@ -15,7 +15,7 @@ if tx.TYPE_CHECKING or np is not None:
 if tx.TYPE_CHECKING or npt is not None:
     DTYPELIKE = tx.TypeVar("DTYPELIKE", bound=npt.DTypeLike)
     """
-    An invariant TypeVar for things that can be converted to numpy dtypes.
+    An invariant TypeVar for objects convertible to a numpy dtype.
     """
 
     __all__.append("DTYPELIKE")

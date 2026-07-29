@@ -1,3 +1,19 @@
+"""
+Invariant TypeVars.
+
+An invariant parameter *ignores* the subtype relation of its argument:
+even though `bool` is a subtype of `int`, `Box[bool]` is neither usable
+where `Box[int]` is expected nor the other way round. This is the only
+sound variance when the parameter appears in both input and output
+positions, as it does for anything mutable.
+
+Invariance is the default for `#!python tx.TypeVar`, so these are
+declared without a variance keyword.
+
+Every TypeVar here carries an upper *bound* (not a set of value
+constraints), so it can be solved for any subtype of that bound, and
+never for an unrelated type.
+"""
 __all__ = [
     "T",
     "K",
@@ -81,7 +97,7 @@ CONTAINER = tx.TypeVar("CONTAINER", bound=tx.Container[tx.Any])
 """An invariant TypeVar for containers."""
 
 HASHABLE = tx.TypeVar("HASHABLE", bound=tx.Hashable)
-"""An invariant hashable TypeVar."""
+"""An invariant TypeVar for hashable objects."""
 
 ITERABLE = tx.TypeVar("ITERABLE", bound=tx.Iterable[tx.Any])
 """An invariant TypeVar for iterables."""

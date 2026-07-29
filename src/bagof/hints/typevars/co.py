@@ -1,3 +1,17 @@
+"""
+Covariant TypeVars.
+
+A covariant parameter *preserves* the subtype relation of its argument:
+since `bool` is a subtype of `int`, `Producer[bool]` is a subtype of
+`Producer[int]` and is usable wherever the latter is expected. That is
+only sound when the parameter appears in output ("producer") positions
+alone -- return types, read-only attributes. A generic class that also
+takes the parameter as an input must use an invariant TypeVar instead.
+
+Every TypeVar here carries an upper *bound* (not a set of value
+constraints), so it can be solved for any subtype of that bound, and
+never for an unrelated type.
+"""
 __all__ = [
     "T",
     "K",
@@ -81,7 +95,7 @@ CONTAINER = tx.TypeVar("CONTAINER", covariant=True, bound=tx.Container[tx.Any])
 """A covariant TypeVar for containers."""
 
 HASHABLE = tx.TypeVar("HASHABLE", covariant=True, bound=tx.Hashable)
-"""A covariant hashable TypeVar."""
+"""A covariant TypeVar for hashable objects."""
 
 ITERABLE = tx.TypeVar("ITERABLE", covariant=True, bound=tx.Iterable[tx.Any])
 """A covariant TypeVar for iterables."""

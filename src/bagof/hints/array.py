@@ -3,7 +3,7 @@ Protocols for array-like objects, independent of any array library.
 
 The protocols defined here are purely *structural*, so they match numpy,
 cupy, dask and any other array library that implements the relevant dunder
--- without importing, or depending on, any of them.
+method -- without importing, or depending on, any of them.
 
 Library-specific hints live in the [`numpy`][bagof.hints.numpy],
 [`cupy`][bagof.hints.cupy] and [`dask`][bagof.hints.dask] submodules.
@@ -80,7 +80,10 @@ class DTypeProtocol(tx.Protocol[DTYPE]):
     """
     An object that carries a data type.
 
-    Any array, and any [`numpy.dtype`][]-like object, satisfies this.
+    Any array, and any [`numpy.dtype`][]-like object, satisfies this. The
+    parameter is the type of the `dtype` attribute itself; it is invariant,
+    because the protocol declares a mutable attribute rather than a
+    read-only property.
     """
 
     dtype: DTYPE
