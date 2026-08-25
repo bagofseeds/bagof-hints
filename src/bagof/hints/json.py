@@ -27,7 +27,9 @@ A scalar that is properly handled by [`json.dump`][]:
 """
 
 JSON: TypeAlias = Union[
-    # Not a TypeAlias because of recursion
+    # The alias names itself, in quotes: it does not exist yet while
+    # this statement is being evaluated, so the inner reference has to
+    # be a forward reference.
     JSONScalar,
     Dict[str, "JSON"],
     BuiltinSequence["JSON"],
@@ -42,7 +44,9 @@ JSONDict: TypeAlias = Dict[str, JSON]
 """A JSON dictionary."""
 
 MutableJSON: TypeAlias = Union[
-    # Not a TypeAlias because of recursion
+    # The alias names itself, in quotes: it does not exist yet while
+    # this statement is being evaluated, so the inner reference has to
+    # be a forward reference.
     JSONScalar,
     Dict[str, "MutableJSON"],
     List["MutableJSON"],
