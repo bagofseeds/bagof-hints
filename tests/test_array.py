@@ -25,19 +25,105 @@ numpy = pytest.importorskip("numpy")
 # ----------------------------------------------------------------------
 
 
-def test_import_hints_does_not_import_array_libraries() -> None:
+def _run_fresh(code: str) -> None:
     # Checked in a fresh interpreter: importing this test module already
     # imported numpy (via ``importorskip``), so an in-process ``sys.modules``
     # check would be meaningless.
     code = (
-        "import sys, bagof.hints\n"
-        "leaked = {'numpy', 'cupy', 'dask'} & set(sys.modules)\n"
-        "assert not leaked, leaked\n"
-    )
+        "import sys\n"
+        "def loaded():\n"
+        "    return {'numpy', 'cupy', 'dask'} & set(sys.modules)\n"
+    ) + code
     result = subprocess.run(
         [sys.executable, "-c", code], capture_output=True, text=True
     )
     assert result.returncode == 0, result.stdout + result.stderr
+
+
+def test_import_hints_does_not_import_array_libraries() -> None:
+    _run_fresh("import bagof.hints\nassert not loaded(), loaded()\n")
+
+
+def test_import_array_submodules_does_not_import_array_libraries() -> None:
+    # Importing the submodules, listing them, and using their library-free
+    # protocols must not import anything: only accessing a hint does.
+    _run_fresh(
+        "import bagof.hints as hints\n"
+        "from bagof.hints.numpy.typevars import co, contra, infer, inv\n"
+        "for name in ('numpy', 'cupy', 'dask'):\n"
+        "    mod = getattr(hints, name)\n"
+        "    assert 'NDArray' in dir(mod), dir(mod)\n"
+        "    assert mod.ArrayProtocol is hints.ArrayProtocol\n"
+        "assert 'DTYPE' in dir(co), dir(co)\n"
+        "hints.numpy.typevars.inv\n"
+        "assert not loaded(), loaded()\n"
+    )
+
+
+@pytest.mark.parametrize(
+    "module,name,expected",
+    [
+        ("numpy", "ndarray", "{'numpy'}"),
+        ("numpy", "ArrayLike", "{'numpy'}"),
+        ("numpy.typevars.co", "DTYPE", "{'numpy'}"),
+        ("numpy.typevars.inv", "__all__", "{'numpy'}"),
+        # dask reuses numpy's dtypes, so its ``dtype`` only needs numpy...
+        ("dask", "dtype", "{'numpy'}"),
+        # ... while its array type needs dask (and numpy, for ``NDArray``).
+        ("dask", "NDArray", "{'numpy', 'dask'}"),
+    ],
+)
+def test_accessing_a_hint_imports_its_library(
+    module: str, name: str, expected: str
+) -> None:
+    if "dask" in expected:
+        pytest.importorskip("dask.array")
+    _run_fresh(
+        f"from bagof.hints import {module.split('.')[0]}\n"
+        f"import bagof.hints.{module} as mod\n"
+        "assert not loaded(), loaded()\n"
+        f"getattr(mod, {name!r})\n"
+        f"assert loaded() == {expected}, loaded()\n"
+    )
+
+
+def test_accessing_a_hint_binds_its_loaded_siblings() -> None:
+    # Once a source module is loaded, all of its hints are bound in the
+    # public namespace, so that tools reading ``vars(module)`` (to avoid
+    # triggering ``__getattr__``) see e.g. ``Array`` after ``NDArray``.
+    pytest.importorskip("dask.array")
+    _run_fresh(
+        "from bagof.hints import dask, numpy\n"
+        "dask.NDArray\n"
+        "bound = set(vars(dask))\n"
+        "assert {'Array', 'NDArray', 'dtype', 'DTypeLike'} <= bound, bound\n"
+        "assert 'ndarray' not in vars(numpy)\n"
+        "numpy.ArrayLike\n"
+        "assert 'ndarray' in vars(numpy)\n"
+    )
+
+
+def test_numpy_typevars_export_nothing_without_numpy() -> None:
+    # Blocking the import simulates an environment without numpy.
+    _run_fresh(
+        "sys.modules['numpy'] = None\n"
+        "from bagof.hints.numpy.typevars import co\n"
+        "assert co.__all__ == [], co.__all__\n"
+        "assert not hasattr(co, 'DTYPE')\n"
+        "namespace = {}\n"
+        "exec('from bagof.hints.numpy.typevars.co import *', namespace)\n"
+        "assert 'DTYPE' not in namespace\n"
+    )
+
+
+@pytest.mark.parametrize("name", ["numpy", "cupy", "dask"])
+def test_lazy_hints_are_cached_and_unknown_names_raise(name: str) -> None:
+    mod = importlib.import_module(f"bagof.hints.{name}")
+    # Resolved once, then stored in the module namespace, so that later
+    # accesses bypass ``__getattr__``.
+    assert mod.__getattr__("NDArray") is vars(mod)["NDArray"]
+    with pytest.raises(AttributeError):
+        _ = mod.does_not_exist
 
 
 @pytest.mark.parametrize("name", ["numpy", "cupy", "dask"])
@@ -119,8 +205,9 @@ def test_dtype_protocol_matches_anything_with_a_dtype() -> None:
 
 def test_numpy_array_types_match_subscriptability() -> None:
     from bagof.hints import numpy as npt
+    from bagof.hints._internal.numpy.arrays import _SUBSCRIPTABLE
 
-    if npt._SUBSCRIPTABLE:
+    if _SUBSCRIPTABLE:
         # numpy >= 1.22 on Python >= 3.9: the hints ARE numpy's own types,
         # so ``isinstance`` and registry-key identity work naturally.
         assert npt.ndarray is numpy.ndarray

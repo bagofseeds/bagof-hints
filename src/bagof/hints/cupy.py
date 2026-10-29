@@ -6,9 +6,11 @@ itself; `dtype`, `DTypeLike` and the protocols are re-exported from
 [`bagof.hints.numpy`][] and [`bagof.hints.array`][].
 
 !!! note
-    This module is **not** imported by `bagof.hints`, so that importing the
-    package never imports cupy. It stays importable when cupy is absent, in
-    which case [`ndarray`][] degrades to an empty generic stub.
+    This module is **not** imported by `bagof.hints`, and importing it does
+    not import cupy either: each hint is resolved on first access, which is
+    when its library is imported (cupy for [`ndarray`][], numpy for
+    [`dtype`][], both for [`NDArray`][]). It stays usable when cupy is
+    absent, in which case [`ndarray`][] degrades to an empty generic stub.
 """
 __all__ = [
     "ArrayProtocol",
@@ -20,51 +22,31 @@ __all__ = [
     "NDArray",
 ]
 
-import sys
-
 import typing_extensions as tx
 
-from ._internal.typevars.inv import DTYPE, SHAPE
+from ._internal.lazy import lazy_attributes
 from .array import (  # noqa: F401
     ArrayNamespace,
     ArrayProtocol,
     DTypeProtocol,
 )
-from .numpy import DTypeLike, dtype  # noqa: F401
 
 if tx.TYPE_CHECKING:
     # Import the bare module so mkdocstrings resolves the `cupy.*`
-    # cross-references in the docstrings below.
-    import cupy  # noqa: F401
-    import cupy as cp
+    # cross-references in the docstrings.
+    import cupy  # noqa: F401, I001
+
+    # Not sorted: the docs list members in import order.
+    from ._internal.numpy.arrays import dtype, DTypeLike
+    from ._internal.cupy import ndarray, NDArray
 
 else:
-    try:
-        import cupy as cp
-    except ImportError:  # pragma: no cover
-        cp = None
-
-
-# Whether cupy's array type can be parametrised at runtime (see the note in
-# ``bagof.hints.numpy`` on the two gates; cupy mirrors numpy's behaviour).
-_SUBSCRIPTABLE = (
-    cp is not None
-    and sys.version_info >= (3, 9)
-    and hasattr(cp.ndarray, "__class_getitem__")
-)
-
-
-if tx.TYPE_CHECKING or _SUBSCRIPTABLE:  # pragma: no cover
-    # cupy is not installable in CI (it needs a CUDA toolchain), so the
-    # library-present branch is only ever type-checked, never run.
-    ndarray = cp.ndarray
-    """See [`cupy.ndarray`][]."""
-
-else:
-
-    class ndarray(tx.Generic[SHAPE, DTYPE]):  # type: ignore[no-redef]
-        """A generic stub for [`cupy.ndarray`][]."""
-
-
-NDArray: tx.TypeAlias = ndarray[tx.Tuple[int, ...], dtype[DTYPE]]
-"""A cupy array of arbitrary shape, parametrised by its data type."""
+    __getattr__, __dir__ = lazy_attributes(
+        __name__,
+        {
+            "DTypeLike": "bagof.hints._internal.numpy.arrays",
+            "dtype": "bagof.hints._internal.numpy.arrays",
+            "ndarray": "bagof.hints._internal.cupy",
+            "NDArray": "bagof.hints._internal.cupy",
+        },
+    )

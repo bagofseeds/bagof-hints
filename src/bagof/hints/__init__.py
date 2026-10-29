@@ -8,9 +8,11 @@ Reusable typing hints for Python projects.
 
 !!! tip ":material-sleep: Lazy modules"
     Lazy modules ([`numpy`][.numpy], [`cupy`][.cupy], [`dask`][.dask])
-    are **not** imported by default, and importing them (or accessing
-    them as `bagof.hints.<name>`) imports the corresponding array library.
-    They stay importable when that library is absent.
+    are **not** imported by default. Importing them (or accessing them as
+    `bagof.hints.<name>`) does not import the corresponding array library
+    either: it is only imported (if installed) when one of their attributes
+    that needs it is accessed, e.g. `bagof.hints.numpy.ndarray`. They stay
+    importable when that library is absent.
 
 Modules
 -------

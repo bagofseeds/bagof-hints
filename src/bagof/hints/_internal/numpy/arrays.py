@@ -1,0 +1,101 @@
+"""
+numpy array and data types, resolved lazily by [`bagof.hints.numpy`][].
+
+Importing this module imports numpy (when installed), which is why the
+public module only loads it once one of these hints is accessed.
+"""
+__all__ = [
+    "ArrayLike",
+    "DTypeLike",
+    "dtype",
+    "ndarray",
+    "NDArray",
+]
+
+import sys
+
+import typing_extensions as tx
+
+if tx.TYPE_CHECKING:
+    # Import numpy so mkdocstrings resolves the `numpy.*` / `numpy.typing.*`
+    # cross-references in the docstrings below.
+    import numpy  # noqa: F401
+    import numpy.typing  # noqa: F401
+
+from ...array import ArrayLike as _ArrayLike
+from ...array import DTypeLike as _DTypeLike
+from ..typevars.inv import DTYPE, SHAPE
+from .compat import np, npt
+
+# Whether numpy's array types can be parametrised at runtime.
+#
+# Two independent gates must both pass:
+#   * numpy >= 1.22, which is when ``ndarray`` / ``dtype`` gained
+#     ``__class_getitem__`` (``numpy.typing`` alone, present from 1.20,
+#     would wrongly claim support on 1.20/1.21); and
+#   * Python >= 3.9 -- numpy refuses the subscription on 3.8 with
+#     "Type subscription requires python >= 3.9", *even though*
+#     ``__class_getitem__`` exists there, so the attribute check alone is a
+#     false positive on 3.8.
+# When either gate fails we fall back to library-free generic stubs, which
+# subscript fine everywhere (subclassing numpy's types is not an option:
+# ``dtype`` cannot be subclassed, and a subclassed ``ndarray`` inherits the
+# same version gate).
+_SUBSCRIPTABLE = (
+    np is not None
+    and sys.version_info >= (3, 9)
+    and hasattr(np.ndarray, "__class_getitem__")
+    and hasattr(np.dtype, "__class_getitem__")
+)
+
+
+if tx.TYPE_CHECKING or _SUBSCRIPTABLE:
+    dtype = np.dtype
+    """See [`numpy.dtype`][]."""
+
+    ndarray = np.ndarray
+    """See [`numpy.ndarray`][]."""
+
+else:  # pragma: no cover
+    # numpy absent, or its types are not subscriptable (numpy < 1.22, or
+    # Python 3.8). ``ndarray`` / ``dtype`` are then generic *stubs* -- not
+    # numpy's own types -- so annotations still evaluate, but ``isinstance``
+    # against them is meaningless (use ``numpy.ndarray`` or the library-free
+    # [`ArrayProtocol`][bagof.hints.array.ArrayProtocol] instead). Not
+    # covered on the 3.x coverage run, where the branch above is taken; the
+    # 3.8 CI job exercises it instead.
+
+    class dtype(tx.Generic[DTYPE]):  # type: ignore[no-redef]
+        """A generic stub for [`numpy.dtype`][]."""
+
+        __module__ = "bagof.hints.numpy"
+
+    class ndarray(tx.Generic[SHAPE, DTYPE]):  # type: ignore[no-redef]
+        """A generic stub for [`numpy.ndarray`][]."""
+
+        __module__ = "bagof.hints.numpy"
+
+
+NDArray: tx.TypeAlias = ndarray[tx.Tuple[int, ...], dtype[DTYPE]]
+"""
+An array of arbitrary shape, parametrised by its data type.
+
+!!! note
+    Unlike [`numpy.typing.NDArray`][], which is generic over the *scalar*
+    type only, this alias keeps both parameters of [`ndarray`][], so that
+    `ndarray[Tuple[int, int], dtype[float64]]` and `NDArray[float64]` agree.
+"""
+
+if tx.TYPE_CHECKING or npt is not None:
+    ArrayLike: tx.TypeAlias = npt.ArrayLike
+    """See [`numpy.typing.ArrayLike`][]."""
+
+    DTypeLike: tx.TypeAlias = npt.DTypeLike
+    """See [`numpy.typing.DTypeLike`][]."""
+
+else:  # pragma: no cover
+    ArrayLike: tx.TypeAlias = _ArrayLike
+    """See [`bagof.hints.array.ArrayLike`][]."""
+
+    DTypeLike: tx.TypeAlias = _DTypeLike
+    """See [`bagof.hints.array.DTypeLike`][]."""
