@@ -1,10 +1,10 @@
 """
-Guarded numpy imports for the [`bagof.hints.numpy`][] package.
+Guarded numpy imports for the [`bagof.hints.numpy`][] hints.
 
-This lives inside the ``hints.numpy`` package -- rather than in the shared
+This lives in its own module -- rather than in the shared
 ``hints._internal.compat`` -- precisely so that importing ``bagof.hints``
-does not import numpy. It is only loaded once something under
-``hints.numpy`` is imported.
+(or ``bagof.hints.numpy``) does not import numpy. It is only loaded once a
+numpy hint is accessed.
 """
 import typing_extensions as tx
 

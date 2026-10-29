@@ -11,7 +11,9 @@ without numpy.
 !!! note
     Each module only defines the TypeVars whose bound is available:
     `DTYPE` needs numpy, and `DTYPELIKE` needs `numpy.typing` as well.
-    When numpy is absent, the modules still import, but export nothing.
+    Importing them does not import numpy: their TypeVars are resolved on
+    first access, which is when numpy is imported. When numpy is absent,
+    the modules still import, but export nothing.
 
 Modules
 -------
@@ -26,5 +28,13 @@ inv
 """
 
 __all__ = ["co", "contra", "infer", "inv"]
+
+import typing_extensions as tx
+
+if tx.TYPE_CHECKING:
+    # Import numpy so mkdocstrings resolves the `numpy.*` / `numpy.typing.*`
+    # cross-references in the docstring above.
+    import numpy  # noqa: F401
+    import numpy.typing  # noqa: F401
 
 from . import co, contra, infer, inv

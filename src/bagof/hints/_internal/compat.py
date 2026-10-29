@@ -25,5 +25,6 @@ else:
 # NOTE: array libraries (numpy, cupy, dask) are deliberately *not* imported
 # here. This module is imported eagerly by ``typevars``, so any array import
 # would run on every ``import bagof.hints``. They are guarded inside the
-# ``hints.numpy`` / ``hints.cupy`` / ``hints.dask`` packages instead, which
-# are only imported on demand (see ``bagof.hints.__getattr__``).
+# ``_internal.numpy`` / ``_internal.cupy`` / ``_internal.dask`` modules
+# instead, which are only imported once one of their hints is accessed (see
+# ``_internal.lazy``).

@@ -1,23 +1,26 @@
-"""Contravariant numpy TypeVars."""
+"""
+Contravariant numpy TypeVars.
 
-__all__ = []
+Importing this module does not import numpy: its TypeVars are resolved on
+first access, which is when numpy is imported.
+"""
 
 import typing_extensions as tx
 
-from .._compat import np, npt
+from ..._internal.lazy import lazy_attributes
 
-if tx.TYPE_CHECKING or np is not None:
-    DTYPE = tx.TypeVar("DTYPE", contravariant=True, bound=np.dtype)
-    """A contravariant TypeVar for numpy dtypes."""
+if tx.TYPE_CHECKING:
+    __all__ = ["DTYPE", "DTYPELIKE"]
 
-    __all__.append("DTYPE")
+    from ..._internal.numpy.typevars.contra import DTYPE, DTYPELIKE
 
-if tx.TYPE_CHECKING or npt is not None:
-    DTYPELIKE = tx.TypeVar(
-        "DTYPELIKE", contravariant=True, bound=npt.DTypeLike
+else:
+    # ``__all__`` is lazy as well, since which TypeVars exist depends on
+    # whether numpy is installed.
+    __getattr__, __dir__ = lazy_attributes(
+        __name__,
+        dict.fromkeys(
+            ["__all__", "DTYPE", "DTYPELIKE"],
+            "bagof.hints._internal.numpy.typevars.contra",
+        ),
     )
-    """
-    A contravariant TypeVar for objects convertible to a numpy dtype.
-    """
-
-    __all__.append("DTYPELIKE")
